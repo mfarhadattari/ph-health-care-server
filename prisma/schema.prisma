@@ -14,7 +14,7 @@ model User {
   password           String
   role               UserRole
   needPasswordChange Boolean    @default(true)
-  status             UserStatus
+  status             UserStatus @default(ACTIVE)
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
   Admin              Admin?
