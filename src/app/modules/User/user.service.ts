@@ -1,6 +1,6 @@
-import { PrismaClient, UserRole } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import bcrypt from "bcrypt";
-const prisma = new PrismaClient();
+import { prisma } from "../../../app";
 
 const createAdmin = async (payload: any) => {
   const password = await bcrypt.hash(payload.password, 12);
