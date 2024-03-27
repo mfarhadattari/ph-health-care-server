@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import cors from "cors";
 import express, { Application, Request, Response } from "express";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
+import notFoundHandler from "./app/middlewares/notFoundHandler";
 import { AppRoutes } from "./app/routes";
 
 const app: Application = express();
@@ -27,5 +29,11 @@ app.get("/", (req: Request, res: Response) => {
 
 // application routes
 app.use("/api/v1", AppRoutes);
+
+// global error handler
+app.use(globalErrorHandler);
+
+// not found handler
+app.use(notFoundHandler);
 
 export default app;
