@@ -1,0 +1,35 @@
+{
+  "name": "ph-health-care-server",
+  "description": "Server Application of PH Health Care Application",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "db_sync": "npx prisma migrate dev",
+    "db_studio": "npx prisma studio"
+  },
+  "repository": "http://github.com/mfarhadattari/ph-health-care-server",
+  "author": {
+    "name": "Mohammad Farhad",
+    "email": "mfarhad.dev@gmail.com",
+    "url": "https://github.com/mfarhadattari/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.2.0",
+    "prisma": "^5.18.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
