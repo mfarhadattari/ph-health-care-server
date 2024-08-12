@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// All Enum Here
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  DOCTOR
+  PATIENT
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+}
+
+// DB Model Start From Here
 model User {
   id                 String     @id @default(uuid())
   email              String     @unique
@@ -21,27 +35,15 @@ model User {
   @@map("users")
 }
 
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  DOCTOR
-  PATIENT
-}
-
-enum UserStatus {
-  ACTIVE
-  BLOCKED
-}
-
 model Admin {
-  id             String   @id @default(uuid())
-  email          String   @unique
-  name           String
-  profilePhoto   String?
-  contractNumber String
-  isDeleted      Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  profilePhoto  String?
+  contactNumber String
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   user User @relation(fields: [email], references: [email])
 
