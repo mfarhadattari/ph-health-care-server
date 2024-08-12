@@ -1,13 +1,70 @@
-import { UserStatus } from "@prisma/client";
+import { Prisma, UserStatus } from "@prisma/client";
 import dbClient from "../../../prisma";
+import { IPaginationOptions } from "../../utils/getPaginationOption";
 import peakObject from "../../utils/peakObject";
-import { adminUpdateAbleFields } from "./admin.const";
+import {
+  generateFilterCondition,
+  generateSearchCondition,
+} from "../../utils/queryHelper";
+import { adminSearchableFields, adminUpdateAbleFields } from "./admin.const";
 import { IUpdate } from "./admin.interface";
 
 /* --------------> Get, Search, Filter Admins <---------- */
-const getAdmins = async () => {
-  const result = await dbClient.admin.findMany();
-  return { data: result, meta: null };
+const getAdmins = async (query: any, options: IPaginationOptions) => {
+  const { searchTerm, ...filterQuery } = query;
+  const { limit, page, skip, sortBy, sortOrder } = options;
+  const andCondition: Prisma.AdminWhereInput[] = [
+    {
+      isDeleted: false,
+    },
+  ];
+
+  // searching
+  if (searchTerm) {
+    const searchCondition = generateSearchCondition(
+      searchTerm,
+      adminSearchableFields
+    );
+    andCondition.push({
+      OR: searchCondition,
+    });
+  }
+
+  // filtering
+  if (filterQuery && Object.keys(filterQuery).length > 0) {
+    const filterCondition = generateFilterCondition(filterQuery);
+    andCondition.push({
+      AND: filterCondition,
+    });
+  }
+
+  // out data from db
+  const result = await dbClient.admin.findMany({
+    where: {
+      AND: andCondition,
+    },
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+    skip: skip,
+    take: limit,
+  });
+
+  // count total
+  const total = await dbClient.admin.count({
+    where: {
+      AND: andCondition,
+    },
+  });
+
+  return {
+    data: result,
+    meta: {
+      page,
+      limit,
+      total: total,
+    },
+  };
 };
 
 /* --------------> Get Admin Details Admin <---------- */

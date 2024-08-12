@@ -1,11 +1,16 @@
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
+import getPaginationOptions from "../../utils/getPaginationOption";
+import peakObject from "../../utils/peakObject";
 import sendResponse from "../../utils/sendResponse";
+import { adminFilterableFields } from "./admin.const";
 import { AdminServices } from "./admin.service";
 
 /* --------------> Get, Search, Filter Admins <---------- */
 const getAdmins = catchAsync(async (req, res) => {
-  const result = await AdminServices.getAdmins();
+  const filterQuery = peakObject(req.query, adminFilterableFields);
+  const options = getPaginationOptions(req.query);
+  const result = await AdminServices.getAdmins(filterQuery, options);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
