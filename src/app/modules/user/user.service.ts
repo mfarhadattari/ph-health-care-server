@@ -1,8 +1,9 @@
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcrypt";
 import dbClient from "../../../prisma";
+import { ICreateAdmin } from "./user.interface";
 
-const createAdmin = async (payload: any) => {
+const createAdmin = async (payload: ICreateAdmin) => {
   const admin = payload.admin;
   const password = await bcrypt.hash(payload.password, 12);
   const user = {
