@@ -1,4 +1,6 @@
 import bcrypt from "bcrypt";
+import httpStatus from "http-status";
+import AppError from "../error/AppError";
 
 export const matchPassword = async (
   planPassword: string,
@@ -8,7 +10,7 @@ export const matchPassword = async (
   try {
     isMatch = await bcrypt.compare(planPassword, hashPassword);
   } catch (error: any) {
-    throw new Error(error.message);
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, error.message);
   }
   return isMatch;
 };
@@ -18,7 +20,7 @@ export const hashPassword = async (password: string) => {
   try {
     hashedPassword = await bcrypt.hash(password, 12);
   } catch (error: any) {
-    throw new Error(error.message);
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, error.message);
   }
   return hashedPassword;
 };
