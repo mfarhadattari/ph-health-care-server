@@ -9,8 +9,8 @@ interface IMetaData {
 interface IResponseData<T> {
   statusCode?: number;
   message?: string;
-  data?: T;
-  meta?: IMetaData;
+  data?: T | null | undefined;
+  meta?: IMetaData | null | undefined;
 }
 
 const sendResponse = <T>(res: Response, payload: IResponseData<T>) => {

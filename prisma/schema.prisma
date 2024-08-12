@@ -18,6 +18,7 @@ enum UserRole {
 enum UserStatus {
   ACTIVE
   BLOCKED
+  DELETED
 }
 
 // DB Model Start From Here
