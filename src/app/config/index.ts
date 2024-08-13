@@ -18,6 +18,9 @@ const config = {
   reset_token_expires: process.env.RESET_TOKEN_EXPIRES as string,
   nodemailer_email: process.env.NODEMAILER_EMAIL,
   nodemailer_secret: process.env.NODEMAILER_SECRET,
+  cloud_cloud_name: process.env.CLOUD_CLOUD_NAME,
+  cloud_api_key: process.env.CLOUD_API_KEY,
+  cloud_api_secret: process.env.CLOUD_API_SECRET,
 };
 
 export default config;

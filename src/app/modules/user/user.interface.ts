@@ -1,8 +1,6 @@
+import { Admin } from "@prisma/client";
+
 export interface ICreateAdmin {
   password: string;
-  admin: {
-    name: string;
-    email: string;
-    contactNumber: string;
-  };
+  admin: Admin;
 }
