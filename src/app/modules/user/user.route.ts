@@ -9,7 +9,7 @@ import { UserValidationSchema } from "./user.validation";
 
 const router = express.Router();
 
-// create user route
+// create admin route
 router.post(
   "/create-admin",
   authValidator(UserRole.SUPER_ADMIN),
@@ -17,6 +17,25 @@ router.post(
   bodyParser,
   reqValidator(UserValidationSchema.createAdmin),
   UserControllers.createAdmin
+);
+
+// create doctor route
+router.post(
+  "/create-doctor",
+  authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  upload.single("file"),
+  bodyParser,
+  reqValidator(UserValidationSchema.createDoctor),
+  UserControllers.createDoctor
+);
+
+// create patient route
+router.post(
+  "/create-user",
+  upload.single("file"),
+  bodyParser,
+  reqValidator(UserValidationSchema.createPatient),
+  UserControllers.createPatient
 );
 
 export const UserRoutes = router;

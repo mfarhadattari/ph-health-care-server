@@ -17,4 +17,24 @@ const createAdmin = catchAsync(async (req, res) => {
   });
 });
 
-export const UserControllers = { createAdmin };
+const createDoctor = catchAsync(async (req, res) => {
+  const result = await UserServices.createDoctor(req.body, req.file as IFile);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    message: "Doctor created successfully",
+    data: result,
+  });
+});
+
+const createPatient = catchAsync(async (req, res) => {
+  const result = await UserServices.createPatient(req.body, req.file as IFile);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    message: "Patient created successfully",
+    data: result,
+  });
+});
+
+export const UserControllers = { createAdmin, createDoctor, createPatient };
