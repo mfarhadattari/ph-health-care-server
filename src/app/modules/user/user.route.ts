@@ -9,6 +9,48 @@ import { UserValidationSchema } from "./user.validation";
 
 const router = express.Router();
 
+// get search and filter users
+router.get(
+  "/",
+  authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  UserControllers.getAllUser
+);
+
+// get user profile
+router.get(
+  "/profile",
+  authValidator(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.DOCTOR,
+    UserRole.PATIENT
+  ),
+  UserControllers.getProfile
+);
+
+// update user profile
+router.patch(
+  "/update-profile",
+  authValidator(
+    UserRole.SUPER_ADMIN,
+    UserRole.ADMIN,
+    UserRole.DOCTOR,
+    UserRole.PATIENT
+  ),
+  upload.single("file"),
+  bodyParser,
+  reqValidator(UserValidationSchema.updateUser),
+  UserControllers.updateProfile
+);
+
+// update user status
+router.patch(
+  "/:id/status",
+  authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  reqValidator(UserValidationSchema.updateStatus),
+  UserControllers.updateStatus
+);
+
 // create admin route
 router.post(
   "/create-admin",

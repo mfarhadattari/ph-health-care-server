@@ -1,18 +1,14 @@
-import { Prisma } from "@prisma/client";
-
 /* --------------->> Generate Search Condition <<----------- */
 export const generateSearchCondition = (
   searchTerm: string,
   searchAbleFields: string[]
 ) => {
-  const searchCondition: Prisma.AdminWhereInput[] = searchAbleFields.map(
-    (field) => ({
-      [field]: {
-        contains: searchTerm,
-        mode: "insensitive",
-      },
-    })
-  );
+  const searchCondition = searchAbleFields.map((field) => ({
+    [field]: {
+      contains: searchTerm,
+      mode: "insensitive",
+    },
+  }));
 
   return searchCondition;
 };
@@ -21,9 +17,7 @@ export const generateSearchCondition = (
 export const generateFilterCondition = <T extends Record<string, unknown>>(
   filterQuery: T
 ) => {
-  const filterCondition: Prisma.AdminWhereInput[] = Object.keys(
-    filterQuery
-  ).map((field) => ({
+  const filterCondition = Object.keys(filterQuery).map((field) => ({
     [field]: {
       equals: filterQuery[field],
     },
