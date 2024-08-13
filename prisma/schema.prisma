@@ -59,23 +59,24 @@ model Admin {
 }
 
 model Doctor {
-  id                  String   @id @default(uuid())
-  email               String   @unique
+  id                  String            @id @default(uuid())
+  email               String            @unique
   name                String
   profilePhoto        String?
   contactNumber       String
   address             String?
   registrationNumber  String
-  experience          Int      @default(0)
+  experience          Int               @default(0)
   gender              Gender
   appointmentFee      Int
   qualification       String
   currentWorkingPlace String
   designation         String
-  avarageRating       Float    @default(0)
-  isDeleted           Boolean  @default(false)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  avarageRating       Float             @default(0)
+  isDeleted           Boolean           @default(false)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  doctorSpecialty     DoctorSpecialty[]
 
   user User @relation(fields: [email], references: [email])
 
@@ -96,4 +97,23 @@ model Patient {
   user User @relation(fields: [email], references: [email])
 
   @@map("patients")
+}
+
+model Specialty {
+  id              String            @id @default(uuid())
+  title           String            @unique
+  icon            String
+  doctorSpecialty DoctorSpecialty[]
+
+  @@map("specialties")
+}
+
+model DoctorSpecialty {
+  specialtiesId String
+  specialty     Specialty @relation(fields: [specialtiesId], references: [id])
+  doctorId      String
+  doctor        Doctor    @relation(fields: [doctorId], references: [id])
+
+  @@id([specialtiesId, doctorId])
+  @@map("doctor_specialties")
 }
