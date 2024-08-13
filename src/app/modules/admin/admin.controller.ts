@@ -1,4 +1,5 @@
 import httpStatus from "http-status";
+import { IFile } from "../../interface/file";
 import catchAsync from "../../utils/catchAsync";
 import getPaginationOptions from "../../utils/getPaginationOption";
 import peakObject from "../../utils/peakObject";
@@ -35,7 +36,11 @@ const getAdminDetails = catchAsync(async (req, res) => {
 /* --------------> Update Admin Details <---------- */
 const updateAdminDetails = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await AdminServices.updateAdminDetails(id, req.body);
+  const result = await AdminServices.updateAdminDetails(
+    id,
+    req.body,
+    req.file as IFile
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

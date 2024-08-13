@@ -8,14 +8,13 @@ import {
   generateFilterCondition,
   generateSearchCondition,
 } from "../../utils/queryHelper";
-import { adminSearchableFields, adminUpdateAbleFields } from "./admin.const";
-import { IAdminUpdate } from "./admin.interface";
+import { doctorSearchableFields, doctorUpdateAbleFields } from "./doctor.const";
 
-/* --------------> Get, Search, Filter Admins <---------- */
-const getAdmins = async (query: any, options: IPaginationOptions) => {
+/* ---------------->> Get, Search & Filter Doctor Service <<------------- */
+const getDoctor = async (query: any, options: IPaginationOptions) => {
   const { searchTerm, ...filterQuery } = query;
   const { limit, page, skip, sortBy, sortOrder } = options;
-  const andCondition: Prisma.AdminWhereInput[] = [
+  const andCondition: Prisma.DoctorWhereInput[] = [
     {
       isDeleted: false,
     },
@@ -25,7 +24,7 @@ const getAdmins = async (query: any, options: IPaginationOptions) => {
   if (searchTerm) {
     const searchCondition = generateSearchCondition(
       searchTerm,
-      adminSearchableFields
+      doctorSearchableFields
     );
     andCondition.push({
       OR: searchCondition,
@@ -41,7 +40,7 @@ const getAdmins = async (query: any, options: IPaginationOptions) => {
   }
 
   // out data from db
-  const result = await dbClient.admin.findMany({
+  const result = await dbClient.doctor.findMany({
     where: {
       AND: andCondition,
     },
@@ -53,7 +52,7 @@ const getAdmins = async (query: any, options: IPaginationOptions) => {
   });
 
   // count total
-  const total = await dbClient.admin.count({
+  const total = await dbClient.doctor.count({
     where: {
       AND: andCondition,
     },
@@ -69,9 +68,9 @@ const getAdmins = async (query: any, options: IPaginationOptions) => {
   };
 };
 
-/* --------------> Get Admin Details Admin <---------- */
-const getAdminDetails = async (id: string) => {
-  const result = await dbClient.admin.findUniqueOrThrow({
+/* ------------------>> Get Doctor Details Service <<--------------- */
+const getDoctorDetails = async (id: string) => {
+  const result = await dbClient.doctor.findUniqueOrThrow({
     where: {
       id,
       isDeleted: false,
@@ -81,14 +80,15 @@ const getAdminDetails = async (id: string) => {
   return result;
 };
 
-/* --------------> Update Admin Detail <---------- */
-const updateAdminDetails = async (
+/* ------------------>> Update Doctor Details Service <<--------------- */
+const updateDoctorDetails = async (
   id: string,
-  payload: IAdminUpdate,
+  payload: any,
   file: IFile | null
 ) => {
-  const updateData = peakObject(payload as any, adminUpdateAbleFields);
-  const admin = await dbClient.admin.findUniqueOrThrow({
+  const updateData = peakObject(payload, doctorUpdateAbleFields);
+
+  const doctor = await dbClient.doctor.findUniqueOrThrow({
     where: {
       id,
       isDeleted: false,
@@ -96,11 +96,11 @@ const updateAdminDetails = async (
   });
 
   if (file) {
-    const { secure_url } = await uploadToCloud(file, `avatar-${admin.email}`);
+    const { secure_url } = await uploadToCloud(file, `avatar-${doctor.email}`);
     updateData.profilePhoto = secure_url;
   }
 
-  const result = await dbClient.admin.update({
+  const result = await dbClient.doctor.update({
     where: {
       id,
     },
@@ -110,16 +110,16 @@ const updateAdminDetails = async (
   return result;
 };
 
-/* --------------> Delete Admin <---------- */
-const deleteAdmin = async (id: string) => {
-  const admin = await dbClient.admin.findUniqueOrThrow({
+/* ------------------>> Delete Doctor Service <<--------------- */
+const deleteDoctor = async (id: string) => {
+  const doctor = await dbClient.doctor.findUniqueOrThrow({
     where: {
       id,
       isDeleted: false,
     },
   });
   const result = await dbClient.$transaction(async (txClient) => {
-    await txClient.admin.update({
+    await txClient.doctor.update({
       where: {
         id,
       },
@@ -130,7 +130,7 @@ const deleteAdmin = async (id: string) => {
 
     await txClient.user.update({
       where: {
-        email: admin.email,
+        email: doctor.email,
       },
       data: {
         status: UserStatus.DELETED,
@@ -141,9 +141,9 @@ const deleteAdmin = async (id: string) => {
   return result;
 };
 
-export const AdminServices = {
-  getAdmins,
-  getAdminDetails,
-  updateAdminDetails,
-  deleteAdmin,
+export const DoctorServices = {
+  getDoctor,
+  getDoctorDetails,
+  updateDoctorDetails,
+  deleteDoctor,
 };

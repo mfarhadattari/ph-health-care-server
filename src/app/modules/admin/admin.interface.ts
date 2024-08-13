@@ -1,4 +1,4 @@
-export interface IUpdate {
+export interface IAdminUpdate {
   name?: string;
   contactNumber?: string;
 }
