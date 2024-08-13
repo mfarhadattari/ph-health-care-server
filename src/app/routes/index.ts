@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import { AdminRoutes } from "../modules/admin/admin.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { DoctorRoutes } from "../modules/doctor/doctor.route";
+import { PatientRoutes } from "../modules/patient/patient.route";
 import { UserRoutes } from "../modules/user/user.route";
 
 const router = express.Router();
@@ -12,6 +13,10 @@ const appRoutes: { path: string; router: Router }[] = [
     router: UserRoutes,
   },
   {
+    path: "/auth",
+    router: AuthRoutes,
+  },
+  {
     path: "/admin",
     router: AdminRoutes,
   },
@@ -20,8 +25,8 @@ const appRoutes: { path: string; router: Router }[] = [
     router: DoctorRoutes,
   },
   {
-    path: "/auth",
-    router: AuthRoutes,
+    path: "/patient",
+    router: PatientRoutes,
   },
 ];
 
