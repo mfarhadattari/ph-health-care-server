@@ -1,4 +1,4 @@
-import { Prisma, UserStatus } from "@prisma/client";
+import { Patient, PatientHealthData, Prisma, UserStatus } from "@prisma/client";
 import dbClient from "../../../prisma";
 import { IFile } from "../../interface/file";
 import { uploadToCloud } from "../../utils/fileUpload";
@@ -52,6 +52,10 @@ const getPatients = async (query: any, options: IPaginationOptions) => {
     },
     skip: skip,
     take: limit,
+    include: {
+      medicalReport: true,
+      patientHealthData: true,
+    },
   });
 
   // count total
@@ -78,6 +82,10 @@ const getPatientDetails = async (id: string) => {
       id,
       isDeleted: false,
     },
+    include: {
+      medicalReport: true,
+      patientHealthData: true,
+    },
   });
 
   return result;
@@ -86,10 +94,10 @@ const getPatientDetails = async (id: string) => {
 /* ------------------>> Update Patient Details Service <<--------------- */
 const updatePatientDetails = async (
   id: string,
-  payload: any,
+  payload: Patient,
   file: IFile | null
 ) => {
-  const updateData = peakObject(payload, patientUpdateAbleFields);
+  const updateData = peakObject(payload as any, patientUpdateAbleFields);
 
   const patient = await dbClient.patient.findUniqueOrThrow({
     where: {
@@ -108,6 +116,10 @@ const updatePatientDetails = async (
       id,
     },
     data: updateData,
+    include: {
+      medicalReport: true,
+      patientHealthData: true,
+    },
   });
 
   return result;
@@ -121,7 +133,7 @@ const deletePatient = async (id: string) => {
       isDeleted: false,
     },
   });
-  const result = await dbClient.$transaction(async (txClient) => {
+  await dbClient.$transaction(async (txClient) => {
     await txClient.patient.update({
       where: {
         id,
@@ -140,6 +152,37 @@ const deletePatient = async (id: string) => {
       },
     });
   });
+};
+
+/* ----------------->> Update Patient Health Data <<---------------- */
+const updatePatientHealthData = async (
+  id: string,
+  payload: PatientHealthData
+) => {
+  const patient = await dbClient.patient.findUniqueOrThrow({
+    where: {
+      id,
+      isDeleted: false,
+    },
+  });
+  payload.patientId = patient.id;
+
+  await dbClient.patientHealthData.upsert({
+    where: {
+      patientId: patient.id,
+    },
+    create: payload,
+    update: payload,
+  });
+
+  const result = await dbClient.patient.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      patientHealthData: true,
+    },
+  });
 
   return result;
 };
@@ -149,4 +192,5 @@ export const PatientServices = {
   getPatientDetails,
   updatePatientDetails,
   deletePatient,
+  updatePatientHealthData,
 };

@@ -62,9 +62,23 @@ const deletePatient = catchAsync(async (req, res) => {
   });
 });
 
+/* ------------------>> Update Patient Health Data Controller <<--------------- */
+const updatePatientHealthData = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await PatientServices.updatePatientHealthData(id, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: "Patient health detail updated",
+    data: result,
+  });
+});
+
 export const PatientControllers = {
   getPatients,
   getPatientDetails,
   updatePatientDetails,
   deletePatient,
+  updatePatientHealthData,
 };

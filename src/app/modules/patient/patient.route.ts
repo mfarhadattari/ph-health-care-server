@@ -41,4 +41,12 @@ router.delete(
   PatientControllers.deletePatient
 );
 
+/* ------------------>> Update Patient Health Data Route <<--------------- */
+router.put(
+  "/:id/health-data",
+  authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.DOCTOR),
+  reqValidator(PatientValidationSchema.updatePatientHealthData),
+  PatientControllers.updatePatientHealthData
+);
+
 export const PatientRoutes = router;
