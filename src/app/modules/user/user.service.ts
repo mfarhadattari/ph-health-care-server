@@ -66,11 +66,6 @@ const createDoctor = async (payload: ICreateDoctor, file: IFile | null) => {
     doctor.profilePhoto = secure_url;
   }
 
-  console.log({
-    doctor,
-    user,
-  });
-
   const result = await dbClient.$transaction(async (txClient) => {
     await txClient.user.create({ data: user });
 
@@ -99,11 +94,6 @@ const createPatient = async (payload: ICreatePatient, file: IFile | null) => {
     const { secure_url } = await uploadToCloud(file, `avatar-${patient.email}`);
     patient.profilePhoto = secure_url;
   }
-
-  console.log({
-    doctor: patient,
-    user,
-  });
 
   const result = await dbClient.$transaction(async (txClient) => {
     await txClient.user.create({ data: user });

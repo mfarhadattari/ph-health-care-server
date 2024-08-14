@@ -9,6 +9,7 @@ export const doctorFilterableFields = [
   "currentWorkingPlace",
   "qualification",
   "searchTerm",
+  "specialties",
 ];
 
 export const doctorSearchableFields = ["name", "email", "contactNumber"];

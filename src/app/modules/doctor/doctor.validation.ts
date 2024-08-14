@@ -13,6 +13,14 @@ const updateDoctor = z.object({
     qualification: z.string().optional(),
     currentWorkingPlace: z.string().optional(),
     designation: z.string().optional(),
+    specialties: z
+      .array(
+        z.object({
+          id: z.string(),
+          isDeleted: z.boolean(),
+        })
+      )
+      .optional(),
   }),
 });
 

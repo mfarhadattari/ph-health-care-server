@@ -1,4 +1,4 @@
-import { Prisma, UserStatus } from "@prisma/client";
+import { Doctor, Prisma, UserStatus } from "@prisma/client";
 import dbClient from "../../../prisma";
 import { IFile } from "../../interface/file";
 import { uploadToCloud } from "../../utils/fileUpload";
@@ -12,7 +12,7 @@ import { doctorSearchableFields, doctorUpdateAbleFields } from "./doctor.const";
 
 /* ---------------->> Get, Search & Filter Doctor Service <<------------- */
 const getDoctor = async (query: any, options: IPaginationOptions) => {
-  const { searchTerm, ...filterQuery } = query;
+  const { searchTerm, specialties, ...filterQuery } = query;
   const { limit, page, skip, sortBy, sortOrder } = options;
   const andCondition: Prisma.DoctorWhereInput[] = [
     {
@@ -39,6 +39,22 @@ const getDoctor = async (query: any, options: IPaginationOptions) => {
     });
   }
 
+  // filter by specialties
+  if (specialties) {
+    andCondition.push({
+      doctorSpecialty: {
+        some: {
+          specialty: {
+            title: {
+              contains: specialties,
+              mode: "insensitive",
+            },
+          },
+        },
+      },
+    });
+  }
+
   // out data from db
   const result = await dbClient.doctor.findMany({
     where: {
@@ -49,6 +65,13 @@ const getDoctor = async (query: any, options: IPaginationOptions) => {
     },
     skip: skip,
     take: limit,
+    include: {
+      doctorSpecialty: {
+        include: {
+          specialty: true,
+        },
+      },
+    },
   });
 
   // count total
@@ -75,6 +98,13 @@ const getDoctorDetails = async (id: string) => {
       id,
       isDeleted: false,
     },
+    include: {
+      doctorSpecialty: {
+        include: {
+          specialty: true,
+        },
+      },
+    },
   });
 
   return result;
@@ -83,11 +113,9 @@ const getDoctorDetails = async (id: string) => {
 /* ------------------>> Update Doctor Details Service <<--------------- */
 const updateDoctorDetails = async (
   id: string,
-  payload: any,
+  payload: Doctor & { specialties: { id: string; isDeleted: boolean }[] },
   file: IFile | null
 ) => {
-  const updateData = peakObject(payload, doctorUpdateAbleFields);
-
   const doctor = await dbClient.doctor.findUniqueOrThrow({
     where: {
       id,
@@ -95,16 +123,70 @@ const updateDoctorDetails = async (
     },
   });
 
+  const { specialties, ...doctorData } = payload;
+  const updateData = peakObject(doctorData as any, doctorUpdateAbleFields);
+
   if (file) {
     const { secure_url } = await uploadToCloud(file, `avatar-${doctor.email}`);
     updateData.profilePhoto = secure_url;
   }
 
-  const result = await dbClient.doctor.update({
+  await dbClient.$transaction(async (txClient) => {
+    if (updateData && Object.keys(updateData).length > 0) {
+      // update doctor data
+      await dbClient.doctor.update({
+        where: {
+          id,
+        },
+        data: updateData,
+      });
+    }
+
+    // update specialties data
+    if (specialties) {
+      //delete specialties
+      const deleteSpecialtyIds = specialties
+        .filter((specialty) => specialty.isDeleted)
+        .map((specialty) => specialty.id);
+
+      if (deleteSpecialtyIds && deleteSpecialtyIds.length > 0) {
+        await dbClient.doctorSpecialty.deleteMany({
+          where: {
+            doctorId: id,
+            specialtiesId: {
+              in: deleteSpecialtyIds,
+            },
+          },
+        });
+      }
+
+      // add specialties
+      const addSpecialties = specialties
+        .filter((specialty) => !specialty.isDeleted)
+        .map((specialty) => ({
+          doctorId: doctor.id,
+          specialtiesId: specialty.id,
+        }));
+
+      if (addSpecialties && addSpecialties.length > 0) {
+        await dbClient.doctorSpecialty.createMany({
+          data: addSpecialties,
+        });
+      }
+    }
+  });
+
+  const result = await dbClient.doctor.findUnique({
     where: {
       id,
     },
-    data: updateData,
+    include: {
+      doctorSpecialty: {
+        include: {
+          specialty: true,
+        },
+      },
+    },
   });
 
   return result;
@@ -118,7 +200,7 @@ const deleteDoctor = async (id: string) => {
       isDeleted: false,
     },
   });
-  const result = await dbClient.$transaction(async (txClient) => {
+  await dbClient.$transaction(async (txClient) => {
     await txClient.doctor.update({
       where: {
         id,
@@ -137,8 +219,6 @@ const deleteDoctor = async (id: string) => {
       },
     });
   });
-
-  return result;
 };
 
 export const DoctorServices = {
