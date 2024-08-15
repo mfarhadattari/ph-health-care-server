@@ -24,6 +24,17 @@ const updateDoctor = z.object({
   }),
 });
 
+const createDoctorSchedule = z.object({
+  body: z.object({
+    schedules: z.array(
+      z.string({
+        required_error: "Schedule ID must be provided.",
+      })
+    ),
+  }),
+});
+
 export const DoctorValidationSchema = {
   updateDoctor,
+  createDoctorSchedule,
 };

@@ -1,9 +1,9 @@
 import { Response } from "express";
 
 interface IMetaData {
-  page: number;
-  limit: number;
-  total: number;
+  page?: number;
+  limit?: number;
+  total?: number;
 }
 
 interface IResponseData<T> {

@@ -4,6 +4,7 @@ import catchAsync from "../../utils/catchAsync";
 import getPaginationOptions from "../../utils/getPaginationOption";
 import peakObject from "../../utils/peakObject";
 import sendResponse from "../../utils/sendResponse";
+import { ScheduleFilterableFields } from "../schedule/schedule.conts";
 import { doctorFilterableFields } from "./doctor.const";
 import { DoctorServices } from "./doctor.service";
 
@@ -62,9 +63,48 @@ const deleteDoctor = catchAsync(async (req, res) => {
   });
 });
 
+/* ------------------->> Create Doctor Schedule Controller <<----------------- */
+const createDoctorSchedule = catchAsync(async (req, res) => {
+  const result = await DoctorServices.createDoctorSchedule(req.body, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    message: "Doctor Schedule created successfully",
+    data: result,
+  });
+});
+
+/* ------------------->> Get Doctor Schedule Controller <<----------------- */
+const getDoctorSchedule = catchAsync(async (req, res) => {
+  const filterQuery = peakObject(req.query, ScheduleFilterableFields);
+  const { id } = req.params;
+  const result = await DoctorServices.getDoctorSchedule(id, filterQuery as any);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: "Doctor Schedule retrieve successfully",
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
+/* ------------------->> Delete Doctor Schedule Controller <<----------------- */
+const deleteDoctorSchedule = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  await DoctorServices.deleteDoctorSchedule(id, req.user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: "Doctor Schedule deleted successfully",
+  });
+});
+
 export const DoctorControllers = {
   getDoctor,
   getDoctorDetails,
   updateDoctorDetails,
   deleteDoctor,
+  createDoctorSchedule,
+  getDoctorSchedule,
+  deleteDoctorSchedule,
 };

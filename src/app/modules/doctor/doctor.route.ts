@@ -26,11 +26,28 @@ router.patch(
 );
 
 /* ------------------>> Delete Doctor Route <<--------------- */
-
 router.delete(
   "/:id",
   authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   DoctorControllers.deleteDoctor
+);
+
+/* ----------------->> Create Doctor Schedule Route <<----------- */
+router.post(
+  "/schedule",
+  authValidator(UserRole.DOCTOR),
+  reqValidator(DoctorValidationSchema.createDoctorSchedule),
+  DoctorControllers.createDoctorSchedule
+);
+
+/* ----------------->> Get Doctor Schedule Route <<----------- */
+router.get("/:id/schedule", DoctorControllers.getDoctorSchedule);
+
+/* ----------------->> Delete  Doctor Schedule Route <<----------- */
+router.delete(
+  "/schedule/:id",
+  authValidator(UserRole.DOCTOR),
+  DoctorControllers.deleteDoctorSchedule
 );
 
 export const DoctorRoutes = router;

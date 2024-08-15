@@ -120,7 +120,7 @@ const forgetPassword = async (payload: { email: string }) => {
   // generate reset token
   const jwtPayload = {
     email: user.email,
-    id: user.id,
+    userId: user.id,
     role: user.role,
   };
   const resetToken = await generateToken(

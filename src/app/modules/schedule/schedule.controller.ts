@@ -28,7 +28,7 @@ const getSchedule = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Schedule deleted successfully",
+    message: "Schedule retrieve successfully",
     meta: result.meta,
     data: result.data,
   });

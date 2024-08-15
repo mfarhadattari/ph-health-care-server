@@ -1,5 +1,9 @@
-import { Doctor, Prisma, UserStatus } from "@prisma/client";
+import { Doctor, DoctorSchedule, Prisma, UserStatus } from "@prisma/client";
+import { add } from "date-fns";
+import httpStatus from "http-status";
+import { JwtPayload } from "jsonwebtoken";
 import dbClient from "../../../prisma";
+import AppError from "../../error/AppError";
 import { IFile } from "../../interface/file";
 import { uploadToCloud } from "../../utils/fileUpload";
 import { IPaginationOptions } from "../../utils/getPaginationOption";
@@ -8,6 +12,7 @@ import {
   generateFilterCondition,
   generateSearchCondition,
 } from "../../utils/queryHelper";
+import { ISchedulerPayload } from "../schedule/schedule.interface";
 import { doctorSearchableFields, doctorUpdateAbleFields } from "./doctor.const";
 
 /* ---------------->> Get, Search & Filter Doctor Service <<------------- */
@@ -221,9 +226,192 @@ const deleteDoctor = async (id: string) => {
   });
 };
 
+/* ------------------->> Create Doctor Schedule Service <<----------------- */
+const createDoctorSchedule = async (
+  payload: { schedules: string[] },
+  user: JwtPayload
+) => {
+  // check doctor exist
+  const doctor = await dbClient.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+  });
+  const doctorSchedules: DoctorSchedule[] = [];
+
+  if (!payload.schedules || payload.schedules.length <= 0) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Schedules ids missing");
+  }
+
+  // filter exist schedule
+  const existScheduleIds: string[] = [];
+  for (const id of payload.schedules) {
+    const isExist = await dbClient.schedule.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (isExist) {
+      existScheduleIds.push(id);
+    }
+  }
+
+  if (!existScheduleIds || existScheduleIds.length <= 0) {
+    throw new AppError(httpStatus.NOT_FOUND, "Schedules not found");
+  }
+
+  for (const scheduleId of existScheduleIds) {
+    // check already exists
+    const isExist = await dbClient.doctorSchedule.findFirst({
+      where: {
+        scheduleId,
+        doctorId: doctor.id,
+      } as Prisma.DoctorScheduleWhereUniqueInput,
+    });
+
+    // create is not exist
+    if (!isExist) {
+      const doctorSchedule = await dbClient.doctorSchedule.create({
+        data: {
+          doctorId: doctor.id,
+          scheduleId: scheduleId,
+        },
+      });
+      doctorSchedules.push(doctorSchedule);
+    }
+  }
+
+  if (!doctorSchedules || doctorSchedules.length <= 0) {
+    throw new AppError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Error creating doctor schedule"
+    );
+  }
+
+  return doctorSchedules;
+};
+
+/* ------------------->> Get Doctor Schedule Service <<----------------- */
+const getDoctorSchedule = async (id: string, query: ISchedulerPayload) => {
+  await dbClient.doctor.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  const andCondition: Prisma.DoctorScheduleWhereInput[] = [
+    {
+      doctorId: id,
+    },
+  ];
+
+  // filtering
+  if (query && Object.keys(query).length > 0) {
+    // start date and time
+    if (query.startDate) {
+      if (query.startTime) {
+        andCondition.push({
+          schedule: {
+            startDateTime: {
+              gte: add(new Date(query.startDate), {
+                hours: parseInt(query.startTime.split(":")[0]),
+                minutes: parseInt(query.startTime.split(":")[1]),
+              }),
+            },
+          },
+        });
+      } else {
+        andCondition.push({
+          schedule: {
+            startDateTime: { gte: new Date(query.startDate) },
+          },
+        });
+      }
+    }
+
+    // end date and time
+    if (query.endDate) {
+      if (query.endTime) {
+        andCondition.push({
+          schedule: {
+            endDateTime: {
+              lte: add(new Date(query.endDate), {
+                hours: parseInt(query.endTime.split(":")[0]),
+                minutes: parseInt(query.endTime.split(":")[1]),
+              }),
+            },
+          },
+        });
+      } else {
+        andCondition.push({
+          schedule: {
+            endDateTime: { lte: new Date(query.endDate) },
+          },
+        });
+      }
+    }
+  }
+
+  // out data from db
+  const result = await dbClient.doctorSchedule.findMany({
+    where: {
+      AND: andCondition,
+    },
+    include: {
+      schedule: true,
+    },
+  });
+
+  // count total
+  const total = await dbClient.doctorSchedule.count({
+    where: {
+      AND: andCondition,
+    },
+  });
+
+  return {
+    data: result,
+    meta: {
+      total: total,
+    },
+  };
+};
+
+/* ------------------->> Delete Doctor Schedule Service <<----------------- */
+const deleteDoctorSchedule = async (id: string, user: JwtPayload) => {
+  const doctor = await dbClient.doctor.findUniqueOrThrow({
+    where: {
+      email: user.email,
+    },
+  });
+
+  const schedule = await dbClient.schedule.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  await dbClient.doctorSchedule.findFirstOrThrow({
+    where: {
+      doctorId: doctor.id,
+      scheduleId: schedule.id,
+    } as Prisma.DoctorScheduleWhereUniqueInput,
+  });
+
+  await dbClient.doctorSchedule.deleteMany({
+    where: {
+      doctorId: doctor.id,
+      scheduleId: schedule.id,
+    } as Prisma.DoctorScheduleWhereUniqueInput,
+  });
+};
+
 export const DoctorServices = {
   getDoctor,
   getDoctorDetails,
   updateDoctorDetails,
   deleteDoctor,
+  createDoctorSchedule,
+  getDoctorSchedule,
+  deleteDoctorSchedule,
 };
