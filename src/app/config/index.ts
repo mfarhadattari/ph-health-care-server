@@ -9,6 +9,8 @@ const config = {
   port: process.env.PORT,
   app_name: process.env.APP_NAME,
   node_env: process.env.NODE_ENV,
+  super_email: process.env.SUPER_EMAIL as string,
+  super_pass: process.env.SUPER_PASS as string,
   client_base_url: process.env.CLIENT_BASE_URL,
   access_token_secret: process.env.ACCESS_TOKEN_SECRET as string,
   access_token_expires: process.env.ACCESS_TOKEN_EXPIRES as string,

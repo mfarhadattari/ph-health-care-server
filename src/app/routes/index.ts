@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import { AdminRoutes } from "../modules/admin/admin.route";
+import { AppointmentRoutes } from "../modules/appointment/appointment.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { DoctorRoutes } from "../modules/doctor/doctor.route";
 import { MedicalReportRoutes } from "../modules/medicalReport/medicalReport.route";
@@ -42,6 +43,10 @@ const appRoutes: { path: string; router: Router }[] = [
   {
     path: "/schedule",
     router: ScheduleRoutes,
+  },
+  {
+    path: "/appointment",
+    router: AppointmentRoutes,
   },
 ];
 
