@@ -111,7 +111,6 @@ const getAppointments = async (
 
 /* ------------------->> Create Appointment Service <<----------------- */
 const createAppointment = async (user: JwtPayload, payload: Appointment) => {
-  console.log({ user, payload });
   // check doctor exist
   const doctor = await dbClient.doctor.findUniqueOrThrow({
     where: {
@@ -138,6 +137,7 @@ const createAppointment = async (user: JwtPayload, payload: Appointment) => {
 
   payload.patientId = patient.id;
   payload.videoCallingId = uuidv4();
+  const transactionId = uuidv4();
 
   const appointment = await dbClient.$transaction(async (txClient) => {
     // create appointment
@@ -150,6 +150,18 @@ const createAppointment = async (user: JwtPayload, payload: Appointment) => {
       data: {
         appointmentId: appointment.id,
         amount: doctor.appointmentFee,
+        transactionId: transactionId,
+      },
+    });
+
+    // update schedule status
+    await dbClient.doctorSchedule.updateMany({
+      where: {
+        doctorId: payload.doctorId,
+        scheduleId: payload.scheduleId,
+      },
+      data: {
+        isBooked: true,
       },
     });
 
