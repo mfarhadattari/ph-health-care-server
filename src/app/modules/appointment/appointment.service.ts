@@ -1,8 +1,15 @@
-import { Appointment, Prisma, UserRole } from "@prisma/client";
+import {
+  Appointment,
+  AppointmentStatus,
+  Prisma,
+  UserRole,
+} from "@prisma/client";
 import { add } from "date-fns";
+import httpStatus from "http-status";
 import { JwtPayload } from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import dbClient from "../../../prisma";
+import AppError from "../../error/AppError";
 import { IPaginationOptions } from "../../utils/getPaginationOption";
 import { IAppointmentPayload } from "./appointment.interface";
 
@@ -320,8 +327,42 @@ const getMyAppointments = async (
   };
 };
 
+/* ------------------->> Update Appointment Service <<----------------- */
+const updateAppointmentStatus = async (
+  user: JwtPayload,
+  id: string,
+  payload: { status: AppointmentStatus }
+) => {
+  // check appointment exist
+  const appointment = await dbClient.appointment.findUniqueOrThrow({
+    where: { id },
+    include: {
+      doctor: true,
+    },
+  });
+
+  // check doctor role
+  if (!user || appointment.doctor.email !== user.email) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You cannot update status of appointment"
+    );
+  }
+
+  // update appointment status
+  const updatedAppointment = await dbClient.appointment.update({
+    where: { id },
+    data: {
+      status: payload.status,
+    },
+  });
+
+  return updatedAppointment;
+};
+
 export const AppointmentServices = {
   getAppointments,
   createAppointment,
   getMyAppointments,
+  updateAppointmentStatus,
 };

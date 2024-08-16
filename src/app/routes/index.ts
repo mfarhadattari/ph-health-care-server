@@ -6,6 +6,7 @@ import { DoctorRoutes } from "../modules/doctor/doctor.route";
 import { MedicalReportRoutes } from "../modules/medicalReport/medicalReport.route";
 import { PatientRoutes } from "../modules/patient/patient.route";
 import { PaymentRoutes } from "../modules/payment/payment.route";
+import { PrescriptionRoutes } from "../modules/precription/precription.route";
 import { ScheduleRoutes } from "../modules/schedule/schedule.route";
 import { SpecialtyRoutes } from "../modules/specialty/specialty.route";
 import { UserRoutes } from "../modules/user/user.route";
@@ -52,6 +53,10 @@ const appRoutes: { path: string; router: Router }[] = [
   {
     path: "/payment",
     router: PaymentRoutes,
+  },
+  {
+    path: "/prescription",
+    router: PrescriptionRoutes,
   },
 ];
 

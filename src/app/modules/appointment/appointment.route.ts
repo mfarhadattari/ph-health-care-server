@@ -22,6 +22,13 @@ router.post(
   AppointmentControllers.createAppointment
 );
 
+/* ----------------->> Create Appointment Route <<----------- */
+router.patch(
+  "/:id",
+  authValidator(UserRole.DOCTOR),
+  AppointmentControllers.updateAppointmentStatus
+);
+
 /* ----------------->> Get My Appointment Route <<----------- */
 router.get(
   "/my-appointment",
