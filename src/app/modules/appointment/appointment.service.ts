@@ -1,6 +1,7 @@
 import {
   Appointment,
   AppointmentStatus,
+  PaymentStatus,
   Prisma,
   UserRole,
 } from "@prisma/client";
@@ -360,9 +361,62 @@ const updateAppointmentStatus = async (
   return updatedAppointment;
 };
 
+/* ------------------->> Cancel Unpaid Appointment Service <<----------------- */
+const cancelUnpaidAppointments = async () => {
+  const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
+  // collect unpaid appointment ids
+  const unpaidAppointments = await dbClient.appointment.findMany({
+    where: {
+      paymentStatus: PaymentStatus.UNPAID,
+      createdAt: {
+        lte: thirtyMinutesAgo,
+      },
+    },
+  });
+
+  const appointmentIdsToCancel = unpaidAppointments.map(
+    (appointment) => appointment.id
+  );
+
+  await dbClient.$transaction(async (txClient) => {
+    // delete payment information
+    await txClient.payment.deleteMany({
+      where: {
+        appointmentId: {
+          in: appointmentIdsToCancel,
+        },
+      },
+    });
+
+    // update doctor  schedule
+    for (const appointment of unpaidAppointments) {
+      await txClient.doctorSchedule.updateMany({
+        where: {
+          doctorId: appointment.doctorId,
+          scheduleId: appointment.scheduleId,
+        },
+        data: {
+          isBooked: false,
+        },
+      });
+    }
+
+    console.log(appointmentIdsToCancel);
+    // delete appointment information
+    await txClient.appointment.deleteMany({
+      where: {
+        id: {
+          in: appointmentIdsToCancel,
+        },
+      },
+    });
+  });
+};
+
 export const AppointmentServices = {
   getAppointments,
   createAppointment,
   getMyAppointments,
   updateAppointmentStatus,
+  cancelUnpaidAppointments,
 };
