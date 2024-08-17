@@ -401,7 +401,6 @@ const cancelUnpaidAppointments = async () => {
       });
     }
 
-    console.log(appointmentIdsToCancel);
     // delete appointment information
     await txClient.appointment.deleteMany({
       where: {
