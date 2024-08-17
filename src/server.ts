@@ -12,5 +12,24 @@ let server: Server;
     console.log("Server listening on port " + port);
     // seed super admin  for application
     await seedAdmin();
+
+    const existHandler = () => {
+      if (server) {
+        server.close(() => {
+          console.info("Server closed");
+        });
+      }
+      process.exit(1);
+    };
+
+    process.on("uncaughtException", (err) => {
+      console.log(err);
+      existHandler();
+    });
+
+    process.on("unhandledRejection", (err) => {
+      console.log(err);
+      existHandler();
+    });
   });
 })();
