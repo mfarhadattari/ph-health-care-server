@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { PrescriptionServices } from "./precription.service";
+import { PrescriptionServices } from "./prescription.service";
 
 /* --------------->> Create Prescription <<------------- */
 const createPrescription = catchAsync(async (req, res) => {

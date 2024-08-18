@@ -4,7 +4,7 @@ import { JwtPayload } from "jsonwebtoken";
 import dbClient from "../../../prisma";
 import AppError from "../../error/AppError";
 
-/* --------------->> Create Prescription <<------------- */
+/* --------------->> Create Prescription  <<------------- */
 const createPrescription = async (
   user: JwtPayload,
   payload: { appointmentId: string; instructions: string; followUpDate: string }
@@ -26,12 +26,12 @@ const createPrescription = async (
   if (!user || user.email !== appointment.doctor.email) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You cannot create prescription for this appointment"
+      "You cannot create Prescription for this appointment"
     );
   }
 
-  // create prescription
-  const prescription = await dbClient.prescription.create({
+  // create Prescription
+  const Prescription = await dbClient.prescription.create({
     data: {
       appointmentId: appointment.id,
       doctorId: appointment.doctorId,
@@ -41,7 +41,7 @@ const createPrescription = async (
     },
   });
 
-  return prescription;
+  return Prescription;
 };
 
 /* --------------->> Get Prescription <<------------- */
@@ -53,7 +53,7 @@ const getMyPrescription = async (user: JwtPayload) => {
       },
     });
 
-    const prescriptions = await dbClient.prescription.findMany({
+    const Prescriptions = await dbClient.prescription.findMany({
       where: {
         doctorId: doctor.id,
       },
@@ -63,7 +63,7 @@ const getMyPrescription = async (user: JwtPayload) => {
       },
     });
 
-    return prescriptions;
+    return Prescriptions;
   } else if (user && user.role === UserRole.PATIENT) {
     const patient = await dbClient.patient.findUniqueOrThrow({
       where: {

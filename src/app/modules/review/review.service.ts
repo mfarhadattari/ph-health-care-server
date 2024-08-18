@@ -43,7 +43,7 @@ const createReview = async (user: JwtPayload, payload: Review) => {
     throw new AppError(httpStatus.BAD_REQUEST, "You already reviewed");
   }
   const result = await dbClient.$transaction(async (txClient) => {
-    // create prescription
+    // create Prescription
     const review = await txClient.review.create({
       data: {
         appointmentId: appointment.id,

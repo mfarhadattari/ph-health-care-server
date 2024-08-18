@@ -1,7 +1,7 @@
 import { UserRole } from "@prisma/client";
 import express from "express";
 import authValidator from "../../middlewares/authValidator";
-import { PrescriptionControllers } from "./precription.controller";
+import { PrescriptionControllers } from "./prescription.controller";
 
 const route = express.Router();
 
@@ -14,7 +14,7 @@ route.post(
 
 /* --------------->> Get Prescription <<------------- */
 route.get(
-  "/my-prescription",
+  "/my-Prescription",
   authValidator(UserRole.DOCTOR, UserRole.PATIENT),
   PrescriptionControllers.getMyPrescription
 );

@@ -4,9 +4,10 @@ import { AppointmentRoutes } from "../modules/appointment/appointment.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { DoctorRoutes } from "../modules/doctor/doctor.route";
 import { MedicalReportRoutes } from "../modules/medicalReport/medicalReport.route";
+import { MetaRoutes } from "../modules/meta/meta.route";
 import { PatientRoutes } from "../modules/patient/patient.route";
 import { PaymentRoutes } from "../modules/payment/payment.route";
-import { PrescriptionRoutes } from "../modules/precription/precription.route";
+import { PrescriptionRoutes } from "../modules/prescription/prescription.route";
 import { ReviewRoutes } from "../modules/review/review.route";
 import { ScheduleRoutes } from "../modules/schedule/schedule.route";
 import { SpecialtyRoutes } from "../modules/specialty/specialty.route";
@@ -56,12 +57,16 @@ const appRoutes: { path: string; router: Router }[] = [
     router: PaymentRoutes,
   },
   {
-    path: "/prescription",
+    path: "/Prescription",
     router: PrescriptionRoutes,
   },
   {
     path: "/review",
     router: ReviewRoutes,
+  },
+  {
+    path: "/meta",
+    router: MetaRoutes,
   },
 ];
 
