@@ -1,8 +1,9 @@
-import { PaymentStatus } from "@prisma/client";
-import httpStatus from "http-status";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
-import { sslPay } from "../../utils/ssl";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { PaymentStatus } from '@prisma/client';
+import httpStatus from 'http-status';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
+import { sslPay } from '../../utils/ssl';
 
 /* --------------->> Init Payment <<------------- */
 const initPayment = async (appointmentId: string) => {
@@ -21,13 +22,13 @@ const initPayment = async (appointmentId: string) => {
   if (!paymentData) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "Payment information not found!"
+      'Payment information not found!',
     );
   }
   if (paymentData.status === PaymentStatus.PAID) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You already pay for the appointment!"
+      'You already pay for the appointment!',
     );
   }
 
@@ -82,7 +83,7 @@ const validatePayment = async (payload: any) => {
   });
 
   return {
-    massage: "Payment Success",
+    massage: 'Payment Success',
   };
 };
 

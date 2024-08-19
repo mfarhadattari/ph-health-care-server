@@ -1,17 +1,18 @@
-import { Patient, PatientHealthData, Prisma, UserStatus } from "@prisma/client";
-import dbClient from "../../../prisma";
-import { IFile } from "../../interface/file";
-import { uploadToCloud } from "../../utils/fileUpload";
-import { IPaginationOptions } from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Patient, PatientHealthData, Prisma, UserStatus } from '@prisma/client';
+import dbClient from '../../../prisma';
+import { IFile } from '../../interface/file';
+import { uploadToCloud } from '../../utils/fileUpload';
+import { IPaginationOptions } from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
 import {
   generateFilterCondition,
   generateSearchCondition,
-} from "../../utils/queryHelper";
+} from '../../utils/queryHelper';
 import {
   patientSearchableFields,
   patientUpdateAbleFields,
-} from "./patient.const";
+} from './patient.const';
 
 /* ---------------->> Get, Search & Filter Patient Service <<------------- */
 const getPatients = async (query: any, options: IPaginationOptions) => {
@@ -27,7 +28,7 @@ const getPatients = async (query: any, options: IPaginationOptions) => {
   if (searchTerm) {
     const searchCondition = generateSearchCondition(
       searchTerm,
-      patientSearchableFields
+      patientSearchableFields,
     );
     andCondition.push({
       OR: searchCondition,
@@ -95,7 +96,7 @@ const getPatientDetails = async (id: string) => {
 const updatePatientDetails = async (
   id: string,
   payload: Patient,
-  file: IFile | null
+  file: IFile | null,
 ) => {
   const updateData = peakObject(payload as any, patientUpdateAbleFields);
 
@@ -157,7 +158,7 @@ const deletePatient = async (id: string) => {
 /* ----------------->> Update Patient Health Data <<---------------- */
 const updatePatientHealthData = async (
   id: string,
-  payload: PatientHealthData
+  payload: PatientHealthData,
 ) => {
   const patient = await dbClient.patient.findUniqueOrThrow({
     where: {

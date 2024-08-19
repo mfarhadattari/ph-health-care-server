@@ -1,10 +1,11 @@
-import httpStatus from "http-status";
-import nodemailer from "nodemailer";
-import config from "../config";
-import AppError from "../error/AppError";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from 'http-status';
+import nodemailer from 'nodemailer';
+import config from '../config';
+import AppError from '../error/AppError';
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: 'smtp.gmail.com',
   port: 587,
   secure: false,
   auth: {

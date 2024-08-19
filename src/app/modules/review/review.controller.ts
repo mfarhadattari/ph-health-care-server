@@ -1,7 +1,7 @@
-import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
-import { ReviewServices } from "./review.service";
+import httpStatus from 'http-status';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { ReviewServices } from './review.service';
 
 /* --------------->> Create Review <<------------- */
 const createReview = catchAsync(async (req, res) => {
@@ -9,7 +9,7 @@ const createReview = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Review created successfully",
+    message: 'Review created successfully',
     data: result,
   });
 });
@@ -20,7 +20,7 @@ const getMyReview = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Review retrieve successfully",
+    message: 'Review retrieve successfully',
     data: result,
   });
 });

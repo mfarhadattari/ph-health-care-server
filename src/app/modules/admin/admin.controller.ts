@@ -1,11 +1,11 @@
-import httpStatus from "http-status";
-import { IFile } from "../../interface/file";
-import catchAsync from "../../utils/catchAsync";
-import getPaginationOptions from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
-import sendResponse from "../../utils/sendResponse";
-import { adminFilterableFields } from "./admin.const";
-import { AdminServices } from "./admin.service";
+import httpStatus from 'http-status';
+import { IFile } from '../../interface/file';
+import catchAsync from '../../utils/catchAsync';
+import getPaginationOptions from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
+import sendResponse from '../../utils/sendResponse';
+import { adminFilterableFields } from './admin.const';
+import { AdminServices } from './admin.service';
 
 /* --------------> Get, Search, Filter Admins <---------- */
 const getAdmins = catchAsync(async (req, res) => {
@@ -15,7 +15,7 @@ const getAdmins = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Admins retrieved successfully",
+    message: 'Admins retrieved successfully',
     data: result.data,
     meta: result.meta,
   });
@@ -28,7 +28,7 @@ const getAdminDetails = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Admin retrieved successfully",
+    message: 'Admin retrieved successfully',
     data: result,
   });
 });
@@ -39,12 +39,12 @@ const updateAdminDetails = catchAsync(async (req, res) => {
   const result = await AdminServices.updateAdminDetails(
     id,
     req.body,
-    req.file as IFile
+    req.file as IFile,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Admin updated successfully",
+    message: 'Admin updated successfully',
     data: result,
   });
 });
@@ -56,7 +56,7 @@ const deleteAdmin = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Admin deleted successfully",
+    message: 'Admin deleted successfully',
     data: result,
   });
 });

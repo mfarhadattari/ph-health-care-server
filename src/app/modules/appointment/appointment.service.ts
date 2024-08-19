@@ -4,20 +4,20 @@ import {
   PaymentStatus,
   Prisma,
   UserRole,
-} from "@prisma/client";
-import { add } from "date-fns";
-import httpStatus from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import { v4 as uuidv4 } from "uuid";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
-import { IPaginationOptions } from "../../utils/getPaginationOption";
-import { IAppointmentPayload } from "./appointment.interface";
+} from '@prisma/client';
+import { add } from 'date-fns';
+import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
+import { IPaginationOptions } from '../../utils/getPaginationOption';
+import { IAppointmentPayload } from './appointment.interface';
 
 /* ------------------->> Get All Appointment Service <<----------------- */
 const getAppointments = async (
   query: IAppointmentPayload,
-  options: IPaginationOptions
+  options: IPaginationOptions,
 ) => {
   const { limit, page, skip, sortBy, sortOrder } = options;
   const andCondition: Prisma.AppointmentWhereInput[] = [];
@@ -31,8 +31,8 @@ const getAppointments = async (
           schedule: {
             startDateTime: {
               gte: add(new Date(query.startDate), {
-                hours: parseInt(query.startTime.split(":")[0]),
-                minutes: parseInt(query.startTime.split(":")[1]),
+                hours: parseInt(query.startTime.split(':')[0]),
+                minutes: parseInt(query.startTime.split(':')[1]),
               }),
             },
           },
@@ -53,8 +53,8 @@ const getAppointments = async (
           schedule: {
             endDateTime: {
               lte: add(new Date(query.endDate), {
-                hours: parseInt(query.endTime.split(":")[0]),
-                minutes: parseInt(query.endTime.split(":")[1]),
+                hours: parseInt(query.endTime.split(':')[0]),
+                minutes: parseInt(query.endTime.split(':')[1]),
               }),
             },
           },
@@ -194,7 +194,7 @@ const createAppointment = async (user: JwtPayload, payload: Appointment) => {
 const getMyAppointments = async (
   user: JwtPayload,
   query: IAppointmentPayload,
-  options: IPaginationOptions
+  options: IPaginationOptions,
 ) => {
   const { limit, page, skip, sortBy, sortOrder } = options;
   const andCondition: Prisma.AppointmentWhereInput[] = [];
@@ -228,8 +228,8 @@ const getMyAppointments = async (
           schedule: {
             startDateTime: {
               gte: add(new Date(query.startDate), {
-                hours: parseInt(query.startTime.split(":")[0]),
-                minutes: parseInt(query.startTime.split(":")[1]),
+                hours: parseInt(query.startTime.split(':')[0]),
+                minutes: parseInt(query.startTime.split(':')[1]),
               }),
             },
           },
@@ -250,8 +250,8 @@ const getMyAppointments = async (
           schedule: {
             endDateTime: {
               lte: add(new Date(query.endDate), {
-                hours: parseInt(query.endTime.split(":")[0]),
-                minutes: parseInt(query.endTime.split(":")[1]),
+                hours: parseInt(query.endTime.split(':')[0]),
+                minutes: parseInt(query.endTime.split(':')[1]),
               }),
             },
           },
@@ -332,7 +332,7 @@ const getMyAppointments = async (
 const updateAppointmentStatus = async (
   user: JwtPayload,
   id: string,
-  payload: { status: AppointmentStatus }
+  payload: { status: AppointmentStatus },
 ) => {
   // check appointment exist
   const appointment = await dbClient.appointment.findUniqueOrThrow({
@@ -346,7 +346,7 @@ const updateAppointmentStatus = async (
   if (!user || appointment.doctor.email !== user.email) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You cannot update status of appointment"
+      'You cannot update status of appointment',
     );
   }
 
@@ -375,7 +375,7 @@ const cancelUnpaidAppointments = async () => {
   });
 
   const appointmentIdsToCancel = unpaidAppointments.map(
-    (appointment) => appointment.id
+    (appointment) => appointment.id,
   );
 
   await dbClient.$transaction(async (txClient) => {

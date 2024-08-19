@@ -1,8 +1,8 @@
-import { PaymentStatus, UserRole } from "@prisma/client";
-import httpStatus from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
+import { PaymentStatus, UserRole } from '@prisma/client';
+import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
 
 const getMetaData = async (user: JwtPayload) => {
   let metaData;
@@ -20,7 +20,7 @@ const getMetaData = async (user: JwtPayload) => {
       metaData = await getPatientMetaData(user);
       break;
     default:
-      throw new AppError(httpStatus.UNAUTHORIZED, "Invalid user role!");
+      throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid user role!');
   }
 
   return metaData;
@@ -96,7 +96,7 @@ const getDoctorMetaData = async (user: JwtPayload) => {
   });
 
   const patientCount = await dbClient.appointment.groupBy({
-    by: ["patientId"],
+    by: ['patientId'],
     _count: {
       id: true,
     },
@@ -121,7 +121,7 @@ const getDoctorMetaData = async (user: JwtPayload) => {
   });
 
   const appointmentStatusDistribution = await dbClient.appointment.groupBy({
-    by: ["status"],
+    by: ['status'],
     _count: { id: true },
     where: {
       doctorId: doctorData.id,
@@ -169,7 +169,7 @@ const getPatientMetaData = async (user: JwtPayload) => {
   });
 
   const appointmentStatusDistribution = await dbClient.appointment.groupBy({
-    by: ["status"],
+    by: ['status'],
     _count: { id: true },
     where: {
       patientId: patientData.id,
@@ -201,14 +201,14 @@ const getBarChartData = async () => {
     `;
 
   return appointmentCountByMonth.map(({ month, count }) => ({
-    month: month.toLocaleString("default", { month: "long" }),
+    month: month.toLocaleString('default', { month: 'long' }),
     count,
   }));
 };
 
 const getPieChartData = async () => {
   const appointmentStatusDistribution = await dbClient.appointment.groupBy({
-    by: ["status"],
+    by: ['status'],
     _count: { id: true },
   });
 

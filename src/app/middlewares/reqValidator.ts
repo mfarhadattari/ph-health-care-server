@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { AnyZodObject } from "zod";
+import { NextFunction, Request, Response } from 'express';
+import { AnyZodObject } from 'zod';
 
 const reqValidator = (validationSchema: AnyZodObject) => {
   return async (req: Request, res: Response, next: NextFunction) => {

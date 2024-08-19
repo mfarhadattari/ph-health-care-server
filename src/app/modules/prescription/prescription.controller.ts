@@ -1,18 +1,18 @@
-import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
-import { PrescriptionServices } from "./prescription.service";
+import httpStatus from 'http-status';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { PrescriptionServices } from './prescription.service';
 
 /* --------------->> Create Prescription <<------------- */
 const createPrescription = catchAsync(async (req, res) => {
   const result = await PrescriptionServices.createPrescription(
     req.user,
-    req.body
+    req.body,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Prescription created successfully",
+    message: 'Prescription created successfully',
     data: result,
   });
 });
@@ -23,7 +23,7 @@ const getMyPrescription = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Prescription retrieve successfully",
+    message: 'Prescription retrieve successfully',
     data: result,
   });
 });

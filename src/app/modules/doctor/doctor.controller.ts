@@ -1,12 +1,13 @@
-import httpStatus from "http-status";
-import { IFile } from "../../interface/file";
-import catchAsync from "../../utils/catchAsync";
-import getPaginationOptions from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
-import sendResponse from "../../utils/sendResponse";
-import { ScheduleFilterableFields } from "../schedule/schedule.conts";
-import { doctorFilterableFields } from "./doctor.const";
-import { DoctorServices } from "./doctor.service";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from 'http-status';
+import { IFile } from '../../interface/file';
+import catchAsync from '../../utils/catchAsync';
+import getPaginationOptions from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
+import sendResponse from '../../utils/sendResponse';
+import { ScheduleFilterableFields } from '../schedule/schedule.conts';
+import { doctorFilterableFields } from './doctor.const';
+import { DoctorServices } from './doctor.service';
 
 /* ---------------->> Get, Search & Filter Doctor Controller <<------------- */
 const getDoctor = catchAsync(async (req, res) => {
@@ -16,7 +17,7 @@ const getDoctor = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Doctors retrieved successfully",
+    message: 'Doctors retrieved successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -29,7 +30,7 @@ const getDoctorDetails = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Doctor detail retrieve",
+    message: 'Doctor detail retrieve',
     data: result,
   });
 });
@@ -41,12 +42,12 @@ const updateDoctorDetails = catchAsync(async (req, res) => {
   const result = await DoctorServices.updateDoctorDetails(
     id,
     req.body,
-    req.file as IFile
+    req.file as IFile,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Doctor detail updated",
+    message: 'Doctor detail updated',
     data: result,
   });
 });
@@ -58,7 +59,7 @@ const deleteDoctor = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Doctor deleted successfully",
+    message: 'Doctor deleted successfully',
     data: result,
   });
 });
@@ -69,7 +70,7 @@ const createDoctorSchedule = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Doctor Schedule created successfully",
+    message: 'Doctor Schedule created successfully',
     data: result,
   });
 });
@@ -82,7 +83,7 @@ const getDoctorSchedule = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Doctor Schedule retrieve successfully",
+    message: 'Doctor Schedule retrieve successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -95,7 +96,7 @@ const deleteDoctorSchedule = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Doctor Schedule deleted successfully",
+    message: 'Doctor Schedule deleted successfully',
   });
 });
 

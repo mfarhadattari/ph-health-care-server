@@ -1,41 +1,42 @@
-import { PrismaClient } from "@prisma/client";
+/* eslint-disable no-console */
+import { PrismaClient } from '@prisma/client';
 
 const dbClient = new PrismaClient({
   log: [
     {
-      emit: "event",
-      level: "query",
+      emit: 'event',
+      level: 'query',
     },
     {
-      emit: "stdout",
-      level: "error",
+      emit: 'stdout',
+      level: 'error',
     },
     {
-      emit: "stdout",
-      level: "info",
+      emit: 'stdout',
+      level: 'info',
     },
     {
-      emit: "stdout",
-      level: "warn",
+      emit: 'stdout',
+      level: 'warn',
     },
   ],
 });
 
-dbClient.$on("query", (e) => {
+dbClient.$on('query', (e) => {
   console.log(
-    "=====================================START========================================="
+    '=====================================START=========================================',
   );
-  console.info("Query: " + e.query);
+  console.info('Query: ' + e.query);
   console.log(
-    "-----------------------------------------------------------------------------"
+    '-----------------------------------------------------------------------------',
   );
-  console.info("Params: " + e.params);
+  console.info('Params: ' + e.params);
   console.log(
-    "-----------------------------------------------------------------------------"
+    '-----------------------------------------------------------------------------',
   );
-  console.info("Duration: " + e.duration + "ms");
+  console.info('Duration: ' + e.duration + 'ms');
   console.log(
-    "======================================END======================================="
+    '======================================END=======================================',
   );
 });
 

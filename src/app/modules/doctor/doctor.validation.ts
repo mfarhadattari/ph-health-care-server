@@ -1,5 +1,5 @@
-import { Gender } from "@prisma/client";
-import { z } from "zod";
+import { Gender } from '@prisma/client';
+import { z } from 'zod';
 
 const updateDoctor = z.object({
   body: z.object({
@@ -18,7 +18,7 @@ const updateDoctor = z.object({
         z.object({
           id: z.string(),
           isDeleted: z.boolean(),
-        })
+        }),
       )
       .optional(),
   }),
@@ -28,8 +28,8 @@ const createDoctorSchedule = z.object({
   body: z.object({
     schedules: z.array(
       z.string({
-        required_error: "Schedule ID must be provided.",
-      })
+        required_error: 'Schedule ID must be provided.',
+      }),
     ),
   }),
 });

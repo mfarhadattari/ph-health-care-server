@@ -1,33 +1,33 @@
-import express from "express";
-import authValidator from "../../middlewares/authValidator";
-import reqValidator from "../../middlewares/reqValidator";
-import { AuthControllers } from "./auth.controller";
-import { AuthValidationSchema } from "./auth.validation";
+import express from 'express';
+import authValidator from '../../middlewares/authValidator';
+import reqValidator from '../../middlewares/reqValidator';
+import { AuthControllers } from './auth.controller';
+import { AuthValidationSchema } from './auth.validation';
 
 const router = express.Router();
 
 // login route
 router.post(
-  "/login",
+  '/login',
   reqValidator(AuthValidationSchema.loginUser),
-  AuthControllers.loginUser
+  AuthControllers.loginUser,
 );
 
 // refresh token route
-router.get("/refresh-token", AuthControllers.refreshToken);
+router.get('/refresh-token', AuthControllers.refreshToken);
 
 // change password route
 router.patch(
-  "/change-password",
-  authValidator("SUPER_ADMIN", "ADMIN", "DOCTOR", "PATIENT"),
+  '/change-password',
+  authValidator('SUPER_ADMIN', 'ADMIN', 'DOCTOR', 'PATIENT'),
   reqValidator(AuthValidationSchema.changePassword),
-  AuthControllers.changePassword
+  AuthControllers.changePassword,
 );
 
 // forget password route
-router.post("/forget-password", AuthControllers.forgetPassword);
+router.post('/forget-password', AuthControllers.forgetPassword);
 
 // reset password route
-router.patch("/reset-password", AuthControllers.resetPassword);
+router.patch('/reset-password', AuthControllers.resetPassword);
 
 export const AuthRoutes = router;

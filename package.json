@@ -8,7 +8,10 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "db_sync": "npx prisma migrate dev",
-    "db_studio": "npx prisma studio"
+    "db_studio": "npx prisma studio",
+    "lint": "eslint",
+    "lint --fix": "eslint src --fix",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },
   "repository": "http://github.com/mfarhadattari/ph-health-care-server",
   "author": {
@@ -37,6 +40,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.9.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
@@ -47,8 +52,15 @@
     "@types/node-cron": "^3.0.11",
     "@types/nodemailer": "^6.4.15",
     "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3",
     "prisma": "^5.18.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.1.0"
   }
 }

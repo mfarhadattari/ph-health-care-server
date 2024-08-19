@@ -1,10 +1,11 @@
-import bcrypt from "bcrypt";
-import httpStatus from "http-status";
-import AppError from "../error/AppError";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import bcrypt from 'bcrypt';
+import httpStatus from 'http-status';
+import AppError from '../error/AppError';
 
 export const matchPassword = async (
   planPassword: string,
-  hashPassword: string
+  hashPassword: string,
 ) => {
   let isMatch: boolean = false;
   try {

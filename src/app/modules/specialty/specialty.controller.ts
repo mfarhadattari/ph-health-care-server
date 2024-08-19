@@ -1,19 +1,19 @@
-import httpStatus from "http-status";
-import { IFile } from "../../interface/file";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
-import { SpecialtyServices } from "./specialty.service";
+import httpStatus from 'http-status';
+import { IFile } from '../../interface/file';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { SpecialtyServices } from './specialty.service';
 
 /* ------------------->> Create Specialty Controller <<----------------- */
 const createSpecialty = catchAsync(async (req, res) => {
   const result = await SpecialtyServices.createSpecialty(
     req.body,
-    req.file as IFile
+    req.file as IFile,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Specialty created successfully",
+    message: 'Specialty created successfully',
     data: result,
   });
 });
@@ -24,7 +24,7 @@ const getSpecialty = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Specialties data fetched",
+    message: 'Specialties data fetched',
     data: result,
   });
 });
@@ -35,12 +35,12 @@ const updateSpecialty = catchAsync(async (req, res) => {
   const result = await SpecialtyServices.updateSpecialty(
     id,
     req.body,
-    req.file as IFile
+    req.file as IFile,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Specialty updated successfully",
+    message: 'Specialty updated successfully',
     data: result,
   });
 });

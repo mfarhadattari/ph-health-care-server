@@ -1,15 +1,16 @@
-import { Prisma, UserStatus } from "@prisma/client";
-import dbClient from "../../../prisma";
-import { IFile } from "../../interface/file";
-import { uploadToCloud } from "../../utils/fileUpload";
-import { IPaginationOptions } from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma, UserStatus } from '@prisma/client';
+import dbClient from '../../../prisma';
+import { IFile } from '../../interface/file';
+import { uploadToCloud } from '../../utils/fileUpload';
+import { IPaginationOptions } from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
 import {
   generateFilterCondition,
   generateSearchCondition,
-} from "../../utils/queryHelper";
-import { adminSearchableFields, adminUpdateAbleFields } from "./admin.const";
-import { IAdminUpdate } from "./admin.interface";
+} from '../../utils/queryHelper';
+import { adminSearchableFields, adminUpdateAbleFields } from './admin.const';
+import { IAdminUpdate } from './admin.interface';
 
 /* --------------> Get, Search, Filter Admins <---------- */
 const getAdmins = async (query: any, options: IPaginationOptions) => {
@@ -25,7 +26,7 @@ const getAdmins = async (query: any, options: IPaginationOptions) => {
   if (searchTerm) {
     const searchCondition = generateSearchCondition(
       searchTerm,
-      adminSearchableFields
+      adminSearchableFields,
     );
     andCondition.push({
       OR: searchCondition,
@@ -85,7 +86,7 @@ const getAdminDetails = async (id: string) => {
 const updateAdminDetails = async (
   id: string,
   payload: IAdminUpdate,
-  file: IFile | null
+  file: IFile | null,
 ) => {
   const updateData = peakObject(payload as any, adminUpdateAbleFields);
   const admin = await dbClient.admin.findUniqueOrThrow({

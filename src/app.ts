@@ -1,12 +1,15 @@
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import express, { Application } from "express";
-import cron from "node-cron";
-import config from "./app/config";
-import globalErrorHandler from "./app/middlewares/globalErrorHandler";
-import notFoundHandler from "./app/middlewares/notFoundHandler";
-import { AppointmentServices } from "./app/modules/appointment/appointment.service";
-import router from "./app/routes";
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express, { Application } from 'express';
+import cron from 'node-cron';
+import config from './app/config';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFoundHandler from './app/middlewares/notFoundHandler';
+import { AppointmentServices } from './app/modules/appointment/appointment.service';
+import router from './app/routes';
 
 const app: Application = express();
 
@@ -16,10 +19,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: "PH Health Care Server Running",
+    message: 'PH Health Care Server Running',
     data: {
       name: config.app_name,
       env: config.node_env,
@@ -29,14 +32,14 @@ app.get("/", (req, res) => {
 });
 
 // application route
-app.use("/api", router);
+app.use('/api', router);
 
 // Schedule to run every minute
-cron.schedule("* * * * *", async () => {
+cron.schedule('* * * * *', async () => {
   try {
     await AppointmentServices.cancelUnpaidAppointments();
   } catch (error) {
-    console.error("Failed");
+    console.error('Failed');
   }
 });
 

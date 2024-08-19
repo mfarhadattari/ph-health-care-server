@@ -1,19 +1,20 @@
-import { Doctor, DoctorSchedule, Prisma, UserStatus } from "@prisma/client";
-import { add } from "date-fns";
-import httpStatus from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
-import { IFile } from "../../interface/file";
-import { uploadToCloud } from "../../utils/fileUpload";
-import { IPaginationOptions } from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Doctor, DoctorSchedule, Prisma, UserStatus } from '@prisma/client';
+import { add } from 'date-fns';
+import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
+import { IFile } from '../../interface/file';
+import { uploadToCloud } from '../../utils/fileUpload';
+import { IPaginationOptions } from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
 import {
   generateFilterCondition,
   generateSearchCondition,
-} from "../../utils/queryHelper";
-import { ISchedulerPayload } from "../schedule/schedule.interface";
-import { doctorSearchableFields, doctorUpdateAbleFields } from "./doctor.const";
+} from '../../utils/queryHelper';
+import { ISchedulerPayload } from '../schedule/schedule.interface';
+import { doctorSearchableFields, doctorUpdateAbleFields } from './doctor.const';
 
 /* ---------------->> Get, Search & Filter Doctor Service <<------------- */
 const getDoctor = async (query: any, options: IPaginationOptions) => {
@@ -29,7 +30,7 @@ const getDoctor = async (query: any, options: IPaginationOptions) => {
   if (searchTerm) {
     const searchCondition = generateSearchCondition(
       searchTerm,
-      doctorSearchableFields
+      doctorSearchableFields,
     );
     andCondition.push({
       OR: searchCondition,
@@ -52,7 +53,7 @@ const getDoctor = async (query: any, options: IPaginationOptions) => {
           specialty: {
             title: {
               contains: specialties,
-              mode: "insensitive",
+              mode: 'insensitive',
             },
           },
         },
@@ -119,7 +120,7 @@ const getDoctorDetails = async (id: string) => {
 const updateDoctorDetails = async (
   id: string,
   payload: Doctor & { specialties: { id: string; isDeleted: boolean }[] },
-  file: IFile | null
+  file: IFile | null,
 ) => {
   const doctor = await dbClient.doctor.findUniqueOrThrow({
     where: {
@@ -139,7 +140,7 @@ const updateDoctorDetails = async (
   await dbClient.$transaction(async (txClient) => {
     if (updateData && Object.keys(updateData).length > 0) {
       // update doctor data
-      await dbClient.doctor.update({
+      await txClient.doctor.update({
         where: {
           id,
         },
@@ -155,7 +156,7 @@ const updateDoctorDetails = async (
         .map((specialty) => specialty.id);
 
       if (deleteSpecialtyIds && deleteSpecialtyIds.length > 0) {
-        await dbClient.doctorSpecialty.deleteMany({
+        await txClient.doctorSpecialty.deleteMany({
           where: {
             doctorId: id,
             specialtiesId: {
@@ -174,7 +175,7 @@ const updateDoctorDetails = async (
         }));
 
       if (addSpecialties && addSpecialties.length > 0) {
-        await dbClient.doctorSpecialty.createMany({
+        await txClient.doctorSpecialty.createMany({
           data: addSpecialties,
         });
       }
@@ -229,7 +230,7 @@ const deleteDoctor = async (id: string) => {
 /* ------------------->> Create Doctor Schedule Service <<----------------- */
 const createDoctorSchedule = async (
   payload: { schedules: string[] },
-  user: JwtPayload
+  user: JwtPayload,
 ) => {
   // check doctor exist
   const doctor = await dbClient.doctor.findUniqueOrThrow({
@@ -240,7 +241,7 @@ const createDoctorSchedule = async (
   const doctorSchedules: DoctorSchedule[] = [];
 
   if (!payload.schedules || payload.schedules.length <= 0) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Schedules ids missing");
+    throw new AppError(httpStatus.BAD_REQUEST, 'Schedules ids missing');
   }
 
   // filter exist schedule
@@ -257,7 +258,7 @@ const createDoctorSchedule = async (
   }
 
   if (!existScheduleIds || existScheduleIds.length <= 0) {
-    throw new AppError(httpStatus.NOT_FOUND, "Schedules not found");
+    throw new AppError(httpStatus.NOT_FOUND, 'Schedules not found');
   }
 
   for (const scheduleId of existScheduleIds) {
@@ -284,7 +285,7 @@ const createDoctorSchedule = async (
   if (!doctorSchedules || doctorSchedules.length <= 0) {
     throw new AppError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      "Error creating doctor schedule"
+      'Error creating doctor schedule',
     );
   }
 
@@ -314,8 +315,8 @@ const getDoctorSchedule = async (id: string, query: ISchedulerPayload) => {
           schedule: {
             startDateTime: {
               gte: add(new Date(query.startDate), {
-                hours: parseInt(query.startTime.split(":")[0]),
-                minutes: parseInt(query.startTime.split(":")[1]),
+                hours: parseInt(query.startTime.split(':')[0]),
+                minutes: parseInt(query.startTime.split(':')[1]),
               }),
             },
           },
@@ -336,8 +337,8 @@ const getDoctorSchedule = async (id: string, query: ISchedulerPayload) => {
           schedule: {
             endDateTime: {
               lte: add(new Date(query.endDate), {
-                hours: parseInt(query.endTime.split(":")[0]),
-                minutes: parseInt(query.endTime.split(":")[1]),
+                hours: parseInt(query.endTime.split(':')[0]),
+                minutes: parseInt(query.endTime.split(':')[1]),
               }),
             },
           },

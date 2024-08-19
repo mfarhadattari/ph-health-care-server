@@ -1,10 +1,10 @@
-import { Prisma, Schedule } from "@prisma/client";
-import { add } from "date-fns";
-import httpStatus from "http-status";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
-import { IPaginationOptions } from "../../utils/getPaginationOption";
-import { ISchedulerPayload } from "./schedule.interface";
+import { Prisma, Schedule } from '@prisma/client';
+import { add } from 'date-fns';
+import httpStatus from 'http-status';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
+import { IPaginationOptions } from '../../utils/getPaginationOption';
+import { ISchedulerPayload } from './schedule.interface';
 
 /* ------------------->> Create Schedule Service <<----------------- */
 const createSchedule = async (payload: ISchedulerPayload) => {
@@ -13,12 +13,12 @@ const createSchedule = async (payload: ISchedulerPayload) => {
   const endDate = new Date(payload.endDate);
   while (startDate <= endDate) {
     const dayStartTime = add(startDate, {
-      hours: parseInt(payload.startTime.split(":")[0]),
-      minutes: parseInt(payload.startTime.split(":")[1]),
+      hours: parseInt(payload.startTime.split(':')[0]),
+      minutes: parseInt(payload.startTime.split(':')[1]),
     });
     const dayEndTime = add(startDate, {
-      hours: parseInt(payload.endTime.split(":")[0]),
-      minutes: parseInt(payload.endTime.split(":")[1]),
+      hours: parseInt(payload.endTime.split(':')[0]),
+      minutes: parseInt(payload.endTime.split(':')[1]),
     });
     let scheduleStart = dayStartTime;
     while (scheduleStart < dayEndTime) {
@@ -51,7 +51,7 @@ const createSchedule = async (payload: ISchedulerPayload) => {
   if (schedules.length <= 0) {
     throw new AppError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      "Something went wrong"
+      'Something went wrong',
     );
   }
 
@@ -61,7 +61,7 @@ const createSchedule = async (payload: ISchedulerPayload) => {
 /* ------------------->> Get Schedule Service <<----------------- */
 const getSchedule = async (
   query: ISchedulerPayload,
-  options: IPaginationOptions
+  options: IPaginationOptions,
 ) => {
   const { limit, page, skip, sortBy, sortOrder } = options;
   const andCondition: Prisma.ScheduleWhereInput[] = [];
@@ -74,8 +74,8 @@ const getSchedule = async (
         andCondition.push({
           startDateTime: {
             gte: add(new Date(query.startDate), {
-              hours: parseInt(query.startTime.split(":")[0]),
-              minutes: parseInt(query.startTime.split(":")[1]),
+              hours: parseInt(query.startTime.split(':')[0]),
+              minutes: parseInt(query.startTime.split(':')[1]),
             }),
           },
         });
@@ -92,8 +92,8 @@ const getSchedule = async (
         andCondition.push({
           endDateTime: {
             lte: add(new Date(query.endDate), {
-              hours: parseInt(query.endTime.split(":")[0]),
-              minutes: parseInt(query.endTime.split(":")[1]),
+              hours: parseInt(query.endTime.split(':')[0]),
+              minutes: parseInt(query.endTime.split(':')[1]),
             }),
           },
         });

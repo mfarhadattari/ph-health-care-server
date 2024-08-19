@@ -1,22 +1,22 @@
-import { UserRole } from "@prisma/client";
-import express from "express";
-import authValidator from "../../middlewares/authValidator";
-import { PrescriptionControllers } from "./prescription.controller";
+import { UserRole } from '@prisma/client';
+import express from 'express';
+import authValidator from '../../middlewares/authValidator';
+import { PrescriptionControllers } from './prescription.controller';
 
 const route = express.Router();
 
 /* --------------->> Create Prescription <<------------- */
 route.post(
-  "/",
+  '/',
   authValidator(UserRole.DOCTOR),
-  PrescriptionControllers.createPrescription
+  PrescriptionControllers.createPrescription,
 );
 
 /* --------------->> Get Prescription <<------------- */
 route.get(
-  "/my-Prescription",
+  '/my-Prescription',
   authValidator(UserRole.DOCTOR, UserRole.PATIENT),
-  PrescriptionControllers.getMyPrescription
+  PrescriptionControllers.getMyPrescription,
 );
 
 export const PrescriptionRoutes = route;

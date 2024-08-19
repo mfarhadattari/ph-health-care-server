@@ -1,39 +1,39 @@
-import { UserRole } from "@prisma/client";
-import express from "express";
-import authValidator from "../../middlewares/authValidator";
-import reqValidator from "../../middlewares/reqValidator";
-import { AppointmentControllers } from "./appointment.controller";
-import { AppointmentValidationSchema } from "./appointment.validation";
+import { UserRole } from '@prisma/client';
+import express from 'express';
+import authValidator from '../../middlewares/authValidator';
+import reqValidator from '../../middlewares/reqValidator';
+import { AppointmentControllers } from './appointment.controller';
+import { AppointmentValidationSchema } from './appointment.validation';
 
 const router = express.Router();
 
 /* ----------------->> Get Appointment Route <<----------- */
 router.get(
-  "/",
+  '/',
   authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  AppointmentControllers.getAppointments
+  AppointmentControllers.getAppointments,
 );
 
 /* ----------------->> Create Appointment Route <<----------- */
 router.post(
-  "/",
+  '/',
   authValidator(UserRole.PATIENT),
   reqValidator(AppointmentValidationSchema.createAppointment),
-  AppointmentControllers.createAppointment
+  AppointmentControllers.createAppointment,
 );
 
 /* ----------------->> Create Appointment Route <<----------- */
 router.patch(
-  "/:id",
+  '/:id',
   authValidator(UserRole.DOCTOR),
-  AppointmentControllers.updateAppointmentStatus
+  AppointmentControllers.updateAppointmentStatus,
 );
 
 /* ----------------->> Get My Appointment Route <<----------- */
 router.get(
-  "/my-appointment",
+  '/my-appointment',
   authValidator(UserRole.DOCTOR, UserRole.PATIENT),
-  AppointmentControllers.getMyAppointments
+  AppointmentControllers.getMyAppointments,
 );
 
 export const AppointmentRoutes = router;

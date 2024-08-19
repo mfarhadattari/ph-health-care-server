@@ -1,7 +1,7 @@
-import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
-import { PaymentServices } from "./payment.service";
+import httpStatus from 'http-status';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { PaymentServices } from './payment.service';
 
 /* --------------->> Init Payment <<------------- */
 const initPayment = catchAsync(async (req, res) => {
@@ -9,7 +9,7 @@ const initPayment = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Payment initialized successfully",
+    message: 'Payment initialized successfully',
     data: result,
   });
 });
@@ -20,7 +20,7 @@ const validatePayment = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Payment success",
+    message: 'Payment success',
     data: result,
   });
 });

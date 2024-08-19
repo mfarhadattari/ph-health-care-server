@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Admin,
   Doctor,
@@ -5,21 +6,21 @@ import {
   Prisma,
   UserRole,
   UserStatus,
-} from "@prisma/client";
-import httpStatus from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
-import { IFile } from "../../interface/file";
-import { hashPassword } from "../../utils/bcryptHelper";
-import { uploadToCloud } from "../../utils/fileUpload";
-import { IPaginationOptions } from "../../utils/getPaginationOption";
+} from '@prisma/client';
+import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
+import { IFile } from '../../interface/file';
+import { hashPassword } from '../../utils/bcryptHelper';
+import { uploadToCloud } from '../../utils/fileUpload';
+import { IPaginationOptions } from '../../utils/getPaginationOption';
 import {
   generateFilterCondition,
   generateSearchCondition,
-} from "../../utils/queryHelper";
-import { userSearchableFields } from "./user.const";
-import { ICreateAdmin, ICreateDoctor, ICreatePatient } from "./user.interface";
+} from '../../utils/queryHelper';
+import { userSearchableFields } from './user.const';
+import { ICreateAdmin, ICreateDoctor, ICreatePatient } from './user.interface';
 
 /* ---------------->> Create Admin Service <<-------------------- */
 const createAdmin = async (payload: ICreateAdmin, file: IFile | null) => {
@@ -205,7 +206,7 @@ const getProfile = async (user: JwtPayload) => {
       },
     });
   } else {
-    throw new AppError(httpStatus.BAD_REQUEST, "Bad request");
+    throw new AppError(httpStatus.BAD_REQUEST, 'Bad request');
   }
 
   return result;
@@ -215,7 +216,7 @@ const getProfile = async (user: JwtPayload) => {
 const updateProfile = async (
   user: JwtPayload,
   payload: Admin | Doctor | Patient,
-  file: IFile | null
+  file: IFile | null,
 ) => {
   if (file) {
     const { secure_url } = await uploadToCloud(file, `avatar-${user.email}`);
@@ -244,7 +245,7 @@ const updateProfile = async (
       data: payload,
     });
   } else {
-    throw new AppError(httpStatus.BAD_REQUEST, "Bad request");
+    throw new AppError(httpStatus.BAD_REQUEST, 'Bad request');
   }
 
   return result;

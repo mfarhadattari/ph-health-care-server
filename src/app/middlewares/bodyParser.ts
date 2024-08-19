@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { RequestHandler } from 'express';
 
 const bodyParser: RequestHandler = async (req, res, next) => {
   try {

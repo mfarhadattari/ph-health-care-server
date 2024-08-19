@@ -1,6 +1,6 @@
 export const ScheduleFilterableFields = [
-  "startDate",
-  "endDate",
-  "startTime",
-  "endTime",
+  'startDate',
+  'endDate',
+  'startTime',
+  'endTime',
 ];

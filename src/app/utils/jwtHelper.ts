@@ -1,11 +1,12 @@
-import httpStatus from "http-status";
-import jwt, { JwtPayload, Secret } from "jsonwebtoken";
-import AppError from "../error/AppError";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from 'http-status';
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import AppError from '../error/AppError';
 
 export const generateToken = async (
   payload: JwtPayload,
   secret: Secret,
-  expiresIn: string
+  expiresIn: string,
 ) => {
   let token: string;
   try {

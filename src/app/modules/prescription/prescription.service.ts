@@ -1,13 +1,17 @@
-import { AppointmentStatus, PaymentStatus, UserRole } from "@prisma/client";
-import httpStatus from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
+import { AppointmentStatus, PaymentStatus, UserRole } from '@prisma/client';
+import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
 
 /* --------------->> Create Prescription  <<------------- */
 const createPrescription = async (
   user: JwtPayload,
-  payload: { appointmentId: string; instructions: string; followUpDate: string }
+  payload: {
+    appointmentId: string;
+    instructions: string;
+    followUpDate: string;
+  },
 ) => {
   // check appointment
   const appointment = await dbClient.appointment.findUniqueOrThrow({
@@ -26,7 +30,7 @@ const createPrescription = async (
   if (!user || user.email !== appointment.doctor.email) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You cannot create Prescription for this appointment"
+      'You cannot create Prescription for this appointment',
     );
   }
 

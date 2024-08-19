@@ -1,4 +1,4 @@
-import { AppointmentStatus, PaymentStatus } from "@prisma/client";
+import { AppointmentStatus, PaymentStatus } from '@prisma/client';
 
 export interface IAppointmentPayload {
   status?: AppointmentStatus;

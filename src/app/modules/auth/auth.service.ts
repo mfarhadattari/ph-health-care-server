@@ -1,13 +1,13 @@
-import { UserStatus } from "@prisma/client";
-import httpStatus from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import dbClient from "../../../prisma";
-import config from "../../config";
-import AppError from "../../error/AppError";
-import { hashPassword, matchPassword } from "../../utils/bcryptHelper";
-import { decodeToken, generateToken } from "../../utils/jwtHelper";
-import { IChangePassword, ILoginUser } from "./auth.interface";
-import { sendResetEmail } from "./auth.utils";
+import { UserStatus } from '@prisma/client';
+import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
+import dbClient from '../../../prisma';
+import config from '../../config';
+import AppError from '../../error/AppError';
+import { hashPassword, matchPassword } from '../../utils/bcryptHelper';
+import { decodeToken, generateToken } from '../../utils/jwtHelper';
+import { IChangePassword, ILoginUser } from './auth.interface';
+import { sendResetEmail } from './auth.utils';
 
 /* -------------->> Login User <<------------ */
 const loginUser = async (payload: ILoginUser) => {
@@ -22,7 +22,7 @@ const loginUser = async (payload: ILoginUser) => {
   // check password
   const isPassMatch = await matchPassword(payload.password, user.password);
   if (!isPassMatch) {
-    throw new AppError(httpStatus.UNAUTHORIZED, "Wrong password");
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Wrong password');
   }
 
   // generate token
@@ -34,12 +34,12 @@ const loginUser = async (payload: ILoginUser) => {
   const accessToken = await generateToken(
     jwtPayload,
     config.access_token_secret,
-    config.access_token_expires
+    config.access_token_expires,
   );
   const refreshToken = await generateToken(
     jwtPayload,
     config.refresh_token_secret,
-    config.refresh_token_expires
+    config.refresh_token_expires,
   );
 
   return {
@@ -70,7 +70,7 @@ const refreshToken = async (token: string) => {
   const accessToken = await generateToken(
     jwtPayload,
     config.access_token_secret,
-    config.access_token_expires
+    config.access_token_expires,
   );
 
   return {
@@ -89,10 +89,10 @@ const changePassword = async (user: JwtPayload, payload: IChangePassword) => {
   // check password
   const isPassMatch = await matchPassword(
     payload.oldPassword,
-    userData.password
+    userData.password,
   );
   if (!isPassMatch) {
-    throw new AppError(httpStatus.UNAUTHORIZED, "Wrong password");
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Wrong password');
   }
 
   // store new password
@@ -126,7 +126,7 @@ const forgetPassword = async (payload: { email: string }) => {
   const resetToken = await generateToken(
     jwtPayload,
     config.refresh_token_secret,
-    config.refresh_token_expires
+    config.refresh_token_expires,
   );
   const resetLink = `${config.client_base_url}/reset-password?id=${user.id}&token=${resetToken}`;
 
@@ -144,7 +144,7 @@ const resetPassword = async (payload: {
 }) => {
   const decoded = await decodeToken(payload.token, config.refresh_token_secret);
   if (!decoded || decoded.id != payload.id) {
-    throw new AppError(httpStatus.FORBIDDEN, "Invalid token");
+    throw new AppError(httpStatus.FORBIDDEN, 'Invalid token');
   }
 
   await dbClient.user.findUniqueOrThrow({

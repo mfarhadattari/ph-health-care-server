@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 interface IMetaData {
   page?: number;
@@ -16,7 +16,7 @@ interface IResponseData<T> {
 const sendResponse = <T>(res: Response, payload: IResponseData<T>) => {
   res.status(payload.statusCode || 200).json({
     success: true,
-    message: payload.message || "Success",
+    message: payload.message || 'Success',
     meta: payload.meta,
     data: payload.data,
   });

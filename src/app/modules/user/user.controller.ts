@@ -1,22 +1,22 @@
-import httpStatus from "http-status";
-import { IFile } from "../../interface/file";
-import catchAsync from "../../utils/catchAsync";
-import getPaginationOptions from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
-import sendResponse from "../../utils/sendResponse";
-import { userFilterableFields } from "./user.const";
-import { UserServices } from "./user.service";
+import httpStatus from 'http-status';
+import { IFile } from '../../interface/file';
+import catchAsync from '../../utils/catchAsync';
+import getPaginationOptions from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
+import sendResponse from '../../utils/sendResponse';
+import { userFilterableFields } from './user.const';
+import { UserServices } from './user.service';
 
 /* ---------------->> Create Admin Controller <<-------------------- */
 const createAdmin = catchAsync(async (req, res) => {
   const result = await UserServices.createAdmin(
     req.body,
-    req.file as IFile | null
+    req.file as IFile | null,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Admin created successfully",
+    message: 'Admin created successfully',
     data: result,
   });
 });
@@ -27,7 +27,7 @@ const createDoctor = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Doctor created successfully",
+    message: 'Doctor created successfully',
     data: result,
   });
 });
@@ -38,7 +38,7 @@ const createPatient = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Patient created successfully",
+    message: 'Patient created successfully',
     data: result,
   });
 });
@@ -51,7 +51,7 @@ const getAllUser = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "User data fetched",
+    message: 'User data fetched',
     data: result.data,
     meta: result.meta,
   });
@@ -64,7 +64,7 @@ const updateStatus = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "User status updated",
+    message: 'User status updated',
   });
 });
 
@@ -75,7 +75,7 @@ const getProfile = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "User profile fetched",
+    message: 'User profile fetched',
     data: result,
   });
 });
@@ -86,12 +86,12 @@ const updateProfile = catchAsync(async (req, res) => {
   const result = await UserServices.updateProfile(
     user,
     req.body,
-    req.file as IFile
+    req.file as IFile,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "User profile updated",
+    message: 'User profile updated',
     data: result,
   });
 });

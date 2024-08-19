@@ -3,11 +3,11 @@ import {
   PaymentStatus,
   Review,
   UserRole,
-} from "@prisma/client";
-import httpStatus from "http-status";
-import { JwtPayload } from "jsonwebtoken";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
+} from '@prisma/client';
+import httpStatus from 'http-status';
+import { JwtPayload } from 'jsonwebtoken';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
 
 /* --------------->> Create Review <<------------- */
 const createReview = async (user: JwtPayload, payload: Review) => {
@@ -28,7 +28,7 @@ const createReview = async (user: JwtPayload, payload: Review) => {
   if (!user || user.email !== appointment.patient.email) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You cannot create review for this appointment"
+      'You cannot create review for this appointment',
     );
   }
 
@@ -40,7 +40,7 @@ const createReview = async (user: JwtPayload, payload: Review) => {
   });
 
   if (isReviewExist) {
-    throw new AppError(httpStatus.BAD_REQUEST, "You already reviewed");
+    throw new AppError(httpStatus.BAD_REQUEST, 'You already reviewed');
   }
   const result = await dbClient.$transaction(async (txClient) => {
     // create Prescription

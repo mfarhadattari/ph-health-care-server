@@ -1,10 +1,10 @@
-import { UserRole, UserStatus } from "@prisma/client";
-import { NextFunction, Request, Response } from "express";
-import httpStatus from "http-status";
-import dbClient from "../../prisma";
-import config from "../config";
-import AppError from "../error/AppError";
-import { decodeToken } from "../utils/jwtHelper";
+import { UserRole, UserStatus } from '@prisma/client';
+import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
+import dbClient from '../../prisma';
+import config from '../config';
+import AppError from '../error/AppError';
+import { decodeToken } from '../utils/jwtHelper';
 
 const authValidator = (...roles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -13,19 +13,19 @@ const authValidator = (...roles: UserRole[]) => {
       if (!token) {
         throw new AppError(
           httpStatus.UNAUTHORIZED,
-          "Authentication token is required"
+          'Authentication token is required',
         );
       }
 
       const decoded = await decodeToken(token, config.access_token_secret);
       if (!decoded) {
-        throw new AppError(httpStatus.FORBIDDEN, "Token is invalid");
+        throw new AppError(httpStatus.FORBIDDEN, 'Token is invalid');
       }
 
       if (!roles.includes(decoded.role)) {
         throw new AppError(
           httpStatus.UNAUTHORIZED,
-          "Unauthorized, user does not have access"
+          'Unauthorized, user does not have access',
         );
       }
 

@@ -1,10 +1,11 @@
-import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-import getPaginationOptions from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
-import sendResponse from "../../utils/sendResponse";
-import { ScheduleFilterableFields } from "./schedule.conts";
-import { ScheduleServices } from "./schedule.service";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from 'http-status';
+import catchAsync from '../../utils/catchAsync';
+import getPaginationOptions from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
+import sendResponse from '../../utils/sendResponse';
+import { ScheduleFilterableFields } from './schedule.conts';
+import { ScheduleServices } from './schedule.service';
 
 /* ------------------->> Create Schedule Controller <<----------------- */
 const createSchedule = catchAsync(async (req, res) => {
@@ -12,7 +13,7 @@ const createSchedule = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: "Schedule created successfully",
+    message: 'Schedule created successfully',
     data: result,
   });
 });
@@ -23,12 +24,12 @@ const getSchedule = catchAsync(async (req, res) => {
   const options = getPaginationOptions(req.query);
   const result = await ScheduleServices.getSchedule(
     filterQuery as any,
-    options
+    options,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Schedule retrieve successfully",
+    message: 'Schedule retrieve successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -41,7 +42,7 @@ const deleteSchedule = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Schedule deleted successfully",
+    message: 'Schedule deleted successfully',
   });
 });
 

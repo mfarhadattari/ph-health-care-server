@@ -1,11 +1,11 @@
-import httpStatus from "http-status";
-import { IFile } from "../../interface/file";
-import catchAsync from "../../utils/catchAsync";
-import getPaginationOptions from "../../utils/getPaginationOption";
-import peakObject from "../../utils/peakObject";
-import sendResponse from "../../utils/sendResponse";
-import { patientFilterableFields } from "./patient.const";
-import { PatientServices } from "./patient.service";
+import httpStatus from 'http-status';
+import { IFile } from '../../interface/file';
+import catchAsync from '../../utils/catchAsync';
+import getPaginationOptions from '../../utils/getPaginationOption';
+import peakObject from '../../utils/peakObject';
+import sendResponse from '../../utils/sendResponse';
+import { patientFilterableFields } from './patient.const';
+import { PatientServices } from './patient.service';
 
 /* ---------------->> Get, Search & Filter Patient Controller <<------------- */
 const getPatients = catchAsync(async (req, res) => {
@@ -15,7 +15,7 @@ const getPatients = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Patients retrieved successfully",
+    message: 'Patients retrieved successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -28,7 +28,7 @@ const getPatientDetails = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Patient detail retrieve",
+    message: 'Patient detail retrieve',
     data: result,
   });
 });
@@ -40,12 +40,12 @@ const updatePatientDetails = catchAsync(async (req, res) => {
   const result = await PatientServices.updatePatientDetails(
     id,
     req.body,
-    req.file as IFile
+    req.file as IFile,
   );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Patient detail updated",
+    message: 'Patient detail updated',
     data: result,
   });
 });
@@ -57,7 +57,7 @@ const deletePatient = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Patient deleted successfully",
+    message: 'Patient deleted successfully',
     data: result,
   });
 });
@@ -70,7 +70,7 @@ const updatePatientHealthData = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Patient health detail updated",
+    message: 'Patient health detail updated',
     data: result,
   });
 });

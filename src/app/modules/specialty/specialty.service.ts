@@ -1,19 +1,19 @@
-import { Specialty } from "@prisma/client";
-import httpStatus from "http-status";
-import dbClient from "../../../prisma";
-import AppError from "../../error/AppError";
-import { IFile } from "../../interface/file";
-import { uploadToCloud } from "../../utils/fileUpload";
+import { Specialty } from '@prisma/client';
+import httpStatus from 'http-status';
+import dbClient from '../../../prisma';
+import AppError from '../../error/AppError';
+import { IFile } from '../../interface/file';
+import { uploadToCloud } from '../../utils/fileUpload';
 
 /* ------------------->> Create Specialty Service <<----------------- */
 const createSpecialty = async (payload: Specialty, file: IFile | null) => {
   if (!file) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Specialty icon is not found");
+    throw new AppError(httpStatus.BAD_REQUEST, 'Specialty icon is not found');
   }
 
   const { secure_url } = await uploadToCloud(
     file,
-    `specialty-icon-${payload.title}`
+    `specialty-icon-${payload.title}`,
   );
   payload.icon = secure_url;
 
@@ -34,7 +34,7 @@ const getSpecialty = async () => {
 const updateSpecialty = async (
   id: string,
   payload: Specialty,
-  file: IFile | null
+  file: IFile | null,
 ) => {
   // check specialty exist
   const specialty = await dbClient.specialty.findUniqueOrThrow({
@@ -47,7 +47,7 @@ const updateSpecialty = async (
   if (file) {
     const { secure_url } = await uploadToCloud(
       file,
-      `specialty-icon-${specialty.title}`
+      `specialty-icon-${specialty.title}`,
     );
     payload.icon = secure_url;
   }

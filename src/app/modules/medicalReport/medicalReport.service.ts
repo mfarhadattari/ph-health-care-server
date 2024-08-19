@@ -1,5 +1,5 @@
-import { MedicalReport } from "@prisma/client";
-import dbClient from "../../../prisma";
+import { MedicalReport } from '@prisma/client';
+import dbClient from '../../../prisma';
 
 /* ------------------->> Create MedicalReport Service <<----------------- */
 const createMedicalReport = async (payload: MedicalReport) => {

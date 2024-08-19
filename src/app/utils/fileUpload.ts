@@ -1,11 +1,13 @@
-import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
-import multer from "multer";
-import path from "path";
-import config from "../config";
-import { ICloudinaryRes, IFile } from "../interface/file";
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs';
+import multer from 'multer';
+import path from 'path';
+import config from '../config';
+import { ICloudinaryRes, IFile } from '../interface/file';
 
-export const upload = multer({ dest: path.join(process.cwd(), "/uploads") });
+export const upload = multer({ dest: path.join(process.cwd(), '/uploads') });
 
 cloudinary.config({
   cloud_name: config.cloud_cloud_name,
@@ -15,13 +17,13 @@ cloudinary.config({
 
 export const uploadToCloud = async (
   file: IFile,
-  id: string
+  id: string,
 ): Promise<ICloudinaryRes> => {
   return new Promise(async (resolve, reject) => {
     try {
       const uploadResult = await cloudinary.uploader.upload(file.path, {
         public_id: id,
-        folder: "ph_health",
+        folder: 'ph_health',
       });
 
       resolve(uploadResult as any);
@@ -29,7 +31,7 @@ export const uploadToCloud = async (
       reject(error);
     }
     await fs.unlink(file.path, () => {
-      console.log("File Delete Success...");
+      console.log('File Delete Success...');
     });
   });
 };

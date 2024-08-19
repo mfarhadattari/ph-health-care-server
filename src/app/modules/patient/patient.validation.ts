@@ -1,5 +1,5 @@
-import { BloodGroup, Gender, MaritalStatus } from "@prisma/client";
-import { z } from "zod";
+import { BloodGroup, Gender, MaritalStatus } from '@prisma/client';
+import { z } from 'zod';
 
 const ZodBloodGroup = z.enum([
   BloodGroup.A_POSITIVE,

@@ -1,4 +1,4 @@
-import { Admin, Doctor, Patient } from "@prisma/client";
+import { Admin, Doctor, Patient } from '@prisma/client';
 
 export interface ICreateAdmin {
   password: string;
