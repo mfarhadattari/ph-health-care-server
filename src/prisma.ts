@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 import { PrismaClient } from '@prisma/client';
 
 const dbClient = new PrismaClient({
@@ -22,7 +22,7 @@ const dbClient = new PrismaClient({
   ],
 });
 
-dbClient.$on('query', (e) => {
+/* dbClient.$on('query', (e) => {
   console.log(
     '=====================================START=========================================',
   );
@@ -38,6 +38,6 @@ dbClient.$on('query', (e) => {
   console.log(
     '======================================END=======================================',
   );
-});
+}); */
 
 export default dbClient;

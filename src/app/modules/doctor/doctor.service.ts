@@ -293,16 +293,16 @@ const createDoctorSchedule = async (
 };
 
 /* ------------------->> Get Doctor Schedule Service <<----------------- */
-const getDoctorSchedule = async (id: string, query: ISchedulerPayload) => {
-  await dbClient.doctor.findUniqueOrThrow({
+const getDoctorSchedule = async (user: JwtPayload, query: ISchedulerPayload) => {
+  const doctor = await dbClient.doctor.findUniqueOrThrow({
     where: {
-      id,
+      email: user.email,
     },
   });
 
   const andCondition: Prisma.DoctorScheduleWhereInput[] = [
     {
-      doctorId: id,
+      doctorId: doctor.id,
     },
   ];
 

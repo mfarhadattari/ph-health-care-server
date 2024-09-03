@@ -78,8 +78,7 @@ const createDoctorSchedule = catchAsync(async (req, res) => {
 /* ------------------->> Get Doctor Schedule Controller <<----------------- */
 const getDoctorSchedule = catchAsync(async (req, res) => {
   const filterQuery = peakObject(req.query, ScheduleFilterableFields);
-  const { id } = req.params;
-  const result = await DoctorServices.getDoctorSchedule(id, filterQuery as any);
+  const result = await DoctorServices.getDoctorSchedule(req.user, filterQuery as any);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

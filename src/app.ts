@@ -14,7 +14,11 @@ import router from './app/routes';
 const app: Application = express();
 
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: config.client_base_url,
+  optionsSuccessStatus: 200,
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

@@ -63,8 +63,28 @@ const updateSpecialty = async (
   return result;
 };
 
+/* ------------------->> Delete Specialty Service <<----------------- */
+const deleteSpecialty = async (id: string) => {
+  // check specialty exist
+  await dbClient.specialty.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  // update specialty in database
+  await dbClient.specialty.delete({
+    where: {
+      id,
+    },
+  });
+
+  return null;
+};
+
 export const SpecialtyServices = {
   createSpecialty,
   getSpecialty,
   updateSpecialty,
+  deleteSpecialty,
 };

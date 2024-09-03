@@ -32,4 +32,11 @@ router.patch(
   SpecialtyControllers.updateSpecialty,
 );
 
+/* ----------------->> Delete Specialty Route <<----------- */
+router.delete(
+  '/:id',
+  authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  SpecialtyControllers.deleteSpecialty,
+);
+
 export const SpecialtyRoutes = router;

@@ -12,6 +12,17 @@ const router = express.Router();
 /* ---------------->> Get, Search & Filter Doctor Route <<------------- */
 router.get('/', DoctorControllers.getDoctor);
 
+/* ----------------->> Create Doctor Schedule Route <<----------- */
+router.post(
+  '/schedule',
+  authValidator(UserRole.DOCTOR),
+  reqValidator(DoctorValidationSchema.createDoctorSchedule),
+  DoctorControllers.createDoctorSchedule,
+);
+
+/* ----------------->> Get Doctor Schedule Route <<----------- */
+router.get('/schedule', authValidator(UserRole.DOCTOR), DoctorControllers.getDoctorSchedule);
+
 /* ------------------>> Get Doctor Details Route <<--------------- */
 router.get('/:id', DoctorControllers.getDoctorDetails);
 
@@ -31,17 +42,6 @@ router.delete(
   authValidator(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   DoctorControllers.deleteDoctor,
 );
-
-/* ----------------->> Create Doctor Schedule Route <<----------- */
-router.post(
-  '/schedule',
-  authValidator(UserRole.DOCTOR),
-  reqValidator(DoctorValidationSchema.createDoctorSchedule),
-  DoctorControllers.createDoctorSchedule,
-);
-
-/* ----------------->> Get Doctor Schedule Route <<----------- */
-router.get('/:id/schedule', DoctorControllers.getDoctorSchedule);
 
 /* ----------------->> Delete  Doctor Schedule Route <<----------- */
 router.delete(

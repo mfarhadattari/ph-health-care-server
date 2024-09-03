@@ -22,7 +22,7 @@ export const decodeToken = async (token: string, secret: Secret) => {
   try {
     decodedPayload = (await jwt.verify(token, secret)) as JwtPayload;
   } catch (error: any) {
-    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, error.message);
+    throw new AppError(httpStatus.UNAUTHORIZED, error.message);
   }
   return decodedPayload;
 };

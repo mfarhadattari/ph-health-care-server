@@ -19,7 +19,7 @@ const authValidator = (...roles: UserRole[]) => {
 
       const decoded = await decodeToken(token, config.access_token_secret);
       if (!decoded) {
-        throw new AppError(httpStatus.FORBIDDEN, 'Token is invalid');
+        throw new AppError(httpStatus.UNAUTHORIZED, 'Token is invalid');
       }
 
       if (!roles.includes(decoded.role)) {
